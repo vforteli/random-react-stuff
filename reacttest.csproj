@@ -1,0 +1,101 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="gruntfile.js" />
+    <None Remove="public\Content\img\20170117_587d98a7d9db8.png" />
+    <None Remove="public\Content\img\712.GIF" />
+    <None Remove="public\Content\img\about-us-office-smal_LARGE-copy-1-1024x301.jpg" />
+    <None Remove="public\Content\img\amex.svg" />
+    <None Remove="public\Content\img\burp.svg" />
+    <None Remove="public\Content\img\cc.svg" />
+    <None Remove="public\Content\img\flexible-networks-nordic_logo-genomskinlig-300x77.png" />
+    <None Remove="public\Content\img\flexinets_logo.png" />
+    <None Remove="public\Content\img\flexinets_logo_grey.png" />
+    <None Remove="public\Content\img\flexinets_logo_mot_svart.png" />
+    <None Remove="public\Content\img\ipass-long-1.png" />
+    <None Remove="public\Content\img\mastercard.svg" />
+    <None Remove="public\Content\img\powered_by_stripe.png" />
+    <None Remove="public\Content\img\visa.svg" />
+    <None Remove="public\Content\img\wandera-wide-2.png" />
+    <None Remove="public\favicon.ico" />
+    <None Remove="sass\bootstrap-callout.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="gruntfile.js" />
+    <Content Include="public\Content\img\20170117_587d98a7d9db8.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\712.GIF">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\about-us-office-smal_LARGE-copy-1-1024x301.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\amex.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\burp.svg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\cc.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\flexible-networks-nordic_logo-genomskinlig-300x77.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\flexinets_logo.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\flexinets_logo_grey.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\flexinets_logo_mot_svart.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\ipass-long-1.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\mastercard.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\powered_by_stripe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\visa.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\Content\img\wandera-wide-2.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="public\favicon.ico">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="sass\bootstrap-callout.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="public\Content\countries_en.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
