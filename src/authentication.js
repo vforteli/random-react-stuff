@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 // todo inject, config, something
-const LOGIN_URL = 'https://authentication.flexinets.se/token';
-const LOGOUT_URL = 'https://authentication.flexinets.se/logout';
+export const LOGIN_URL = 'https://authentication.flexinets.se/token';
+export const LOGOUT_URL = 'https://authentication.flexinets.se/logout';
 const ACCOUNT_URL = 'https://authentication.flexinets.se/api/account/';
 const TOKEN_KEY = 'react_token';
 
@@ -21,19 +21,16 @@ export async function login(username, password) {
     loginFormData.append('username', username);
     loginFormData.append('password', password);
 
-    return axios({
+    var response = await axios({
         method: 'post',
         url: LOGIN_URL,
         data: loginFormData,
         config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-    }).then((response) => {
-        if (response.status === 200) {
-            setToken(response.data);
-        }
-        return response;
-    }).catch((error) => {
-        console.log(error);
     });
+    if (response.status === 200) {
+        setToken(response.data);
+    }
+    return response;
 }
 
 export function logout() {
@@ -74,34 +71,18 @@ export function getCurrentUser() {
 }
 
 export async function getRefreshedAccessToken() {
-
     let token = getToken();
     if (token !== null) {
-        try {
-            if (isTokenExpired(token.access_token)) {
-                console.debug('Token has expired, start refresh maybe');
-            }
-        } catch (error) {
-            console.debug('Unable to parse jwt access token');
-            console.debug(error);
+        if (isTokenExpired(token.access_token)) {
+            console.debug('Token has expired, start refresh maybe');
+            const result = await refreshToken();
+            console.debug('token refresh result ' + result);
         }
+        return getToken().access_token;    // test stuff
     }
-    //            if (!await refreshToken()) {
-    //                console.debug('Refresh failed, refresh token expired probably...');
-    //                return null;
-    //            }
-    //            console.debug('gnaa?');
-    //        }
-
-    //        let accessToken = getToken().access_token;
-    //        console.debug('returning token' + accessToken);
-    //        return accessToken;
-    //    }
-    //    
-    //}
-    //return null;
-    return Promise.resolve(getToken().access_token);    // test stuff
+    return null;
 }
+
 
 /**
  * Save the token to localStorage
@@ -133,39 +114,36 @@ function getToken() {
  * Refresh access token
  */
 async function refreshToken() {
-    console.debug(refreshPromise);
-    if (refreshPromise === null) {
-        console.debug('Starting new token refresh');
-
-        let loginFormData = new FormData();
-        loginFormData.append('grant_type', 'refresh_token');
-
-        refreshPromise = axios({
-            method: 'post',
-            url: LOGIN_URL,
-            data: loginFormData,
-            config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        }).then(response => {
-            console.debug(response);
-            if (response.status === 200) {
-                console.debug('Refreshed access token');
-                setToken(response.data);
-                return true;
-            }
-            console.debug('not logged in');
-            console.debug(response.status);
-            return false;
-        }, function (response) {
-            if (response.data.error === 'invalid_grant') {
-                console.debug('Refresh token expired');
-                clearTokenContext();
-                return false;
-            }
-        });
-    }
-    else {
+    if (refreshPromise !== null) {
         console.debug('Pending token refresh, reusing promise');
+        return refreshPromise;
     }
+
+    console.debug('Starting new token refresh');
+
+    let loginFormData = new FormData();
+    loginFormData.append('grant_type', 'refresh_token');
+
+    refreshPromise = axios({
+        method: 'post',
+        url: LOGIN_URL,
+        data: loginFormData,
+        config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+    }).then(response => {
+        refreshPromise = null;
+        console.debug('Refreshed access token');
+        setToken(response.data);
+        return true;
+    }).catch(function (error) {
+        refreshPromise = null;
+        console.debug(error);
+        if (error.response.data.error === 'invalid_grant') {
+            console.debug('Refresh token expired');
+            clearTokenContext();
+            return false;
+        }
+    });
+
     return refreshPromise;
 }
 

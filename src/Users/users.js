@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Route, Link } from 'react-router-dom';
 
 class Users extends Component {
     constructor(props) {
@@ -45,14 +46,16 @@ class Users extends Component {
 
                 {(this.state.users && this.state.users.length > 0) &&
                     <div className="card mb-3">
+                        <Route path="/users/create" />
+                        <Route path="/users/edit/:id" />
                         <div className="card-body">
-                            <a ui-sref="users.detail.create()" className="btn btn-primary"><span className="fas fa-plus"></span> Add User</a>
+                            <Link to='/users/create' className="btn btn-primary"><span className="fas fa-plus"></span> Add User</Link>{' '}
                             <div className="btn-group">
                                 <button className="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
                                     Selected Users <span className="caret"></span>
                                 </button>
                                 <div className="dropdown-menu">
-                                    <a className="dropdown-item" href="#sendinvite" ng-click="openSendInvite(users)">Send invite</a>
+                                    <a className="dropdown-item" href="" ng-click="openSendInvite(users)">Send invite</a>
                                 </div>
                             </div>
 
@@ -74,23 +77,7 @@ class Users extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="user in users track by user.UserID">
-                                        <td className="wrapcolumn"><input type="checkbox" ng-model="user.selected" /></td>
-                                        <td ui-sref="users.detail.edit({ userId: user.UserID })" className="pointer">
-                                            <div className="row">
-                                                <div className="col-md-5"><a ui-sref="users.detail.edit({ userId: user.UserID })" ng-bind="::user.Fullname"></a></div>
-                                                <div className="col-md-5" ng-bind="::user.EmailAddress"></div>
-                                                <div className="col-md-2">
-                                                    <span ng-show="::user.Enabled" className="label label-success">Active</span>
-                                                    <span ng-hide="::user.Enabled" className="label label-danger">Suspended</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="wrapcolumn">
-                                            <a className="btn btn-info" ui-sref="users.detail.edit({ userId: user.UserID })"><i className="fas fa-edit fa-fw"></i></a>
-                                            <button type="button" className="btn btn-danger" ng-click="openDeleteUserModal(user, users)"><span className="fas fa-times fa-fw"></span></button>
-                                        </td>
-                                    </tr>
+                                    <UserList items={this.state.users} />
                                 </tbody>
                             </table>
                         </div>
@@ -100,6 +87,24 @@ class Users extends Component {
         );
     }
 }
+
+const UserList = props =>
+    props.items.map((user) =>
+        <tr key={user.UserID}>
+            <td className="wrapcolumn"><input type="checkbox" ng-model="user.selected" /></td>
+            <td ui-sref="users.detail.edit({ userId: user.UserID })" className="pointer">
+                <div className="row">
+                    <div className="col-md-5"><a href="">{user.Fullname}</a></div>
+                    <div className="col-md-5">{user.EmailAddress}</div>
+                    <div className="col-md-2">{user.Enabled ? <span className="label label-success">Active</span> : <span className="label label-danger">Suspended</span>}</div>
+                </div>
+            </td>
+            <td className="wrapcolumn">
+                <Link className="btn btn-info" to={'/users/edit/' + user.UserID}><i className="fas fa-edit fa-fw"></i></Link>{' '}
+                <button type="button" className="btn btn-danger" ng-click="openDeleteUserModal(user, users)"><span className="fas fa-times fa-fw"></span></button>
+            </td>
+        </tr>
+    );
 
 
 

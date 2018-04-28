@@ -1,7 +1,8 @@
 ﻿import React, { Component } from 'react';
-import { login, isLoggedIn, getCurrentUser } from '../authentication';
-import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
+import { login, isLoggedIn } from '../authentication';
+import { Route, Link, withRouter } from "react-router-dom";
 import BeginPasswordReset from './beginPasswordReset';
+import { ButtonLoading } from '../components';
 
 
 class Login extends Component {
@@ -9,7 +10,8 @@ class Login extends Component {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            loading: false
         };
     }
 
@@ -26,13 +28,19 @@ class Login extends Component {
         this.setState({ [name]: value });
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async event => {
         event.preventDefault();
-        login(this.state.username, this.state.password).then((response) => {
-            if (response.status === 200) {
-                this.props.history.push("/");   // todo redirect to previous?
+        this.setState({ loading: true });
+        var response = await login(this.state.username, this.state.password);
+        if (response.status === 200) {
+            this.setState({ loading: false });
+            if (this.props.location && this.props.location.state && this.props.location.state.previousLocation && this.props.location.state.previousLocation.pathname) {
+                this.props.history.push(this.props.location.state.previousLocation.pathname);
             }
-        });
+            else {
+                this.props.history.push("/");
+            }
+        }
     }
 
     render() {
@@ -46,9 +54,7 @@ class Login extends Component {
                             <input type="email" value={this.state.username} onChange={this.handleChange} id="Username" name="username" placeholder="Email address" required autoFocus className="form-control" />
                             <label className="sr-only" htmlFor="Password">Password</label>
                             <input type="password" value={this.state.password} onChange={this.handleChange} id="Password" name="password" placeholder="Password" required className="form-control" />
-                            <br />
-                            <button type="submit" className="btn btn-block btn-primary">Log in</button>
-                            <br />
+                            <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-primary mt-4 mb-4" value='Log in' />
                             <div className="text-center"><h5><Link to='/login/reset'>Forgot password?</Link></h5></div>
                         </form>
                     </div>
@@ -58,5 +64,6 @@ class Login extends Component {
         );
     }
 }
+
 
 export default withRouter(Login);
