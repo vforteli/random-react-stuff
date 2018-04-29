@@ -3,6 +3,7 @@ import { login, isLoggedIn } from '../authentication';
 import { Route, Link, withRouter } from "react-router-dom";
 import BeginPasswordReset from './beginPasswordReset';
 import { ButtonLoading } from '../components';
+import { Alert } from 'reactstrap';
 
 
 class Login extends Component {
@@ -11,7 +12,7 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            loading: false
+            alertVisible: false
         };
     }
 
@@ -32,8 +33,8 @@ class Login extends Component {
         event.preventDefault();
         this.setState({ loading: true });
         var response = await login(this.state.username, this.state.password);
+        this.setState({ loading: false });
         if (response.status === 200) {
-            this.setState({ loading: false });
             if (this.props.location && this.props.location.state && this.props.location.state.previousLocation && this.props.location.state.previousLocation.pathname) {
                 this.props.history.push(this.props.location.state.previousLocation.pathname);
             }
@@ -41,7 +42,13 @@ class Login extends Component {
                 this.props.history.push("/");
             }
         }
+        else {
+            this.setState({ alertVisible: true, alertText: response.data.error });
+        }
+
     }
+
+    onAlertDismiss = () => { this.setState({ alertVisible: false }); }
 
     render() {
         return (
@@ -50,11 +57,16 @@ class Login extends Component {
                     <div className="card-body">
                         <form method="post" onSubmit={this.handleSubmit} className="form-signin">
                             <h3>Log in to Flexinets Global Wi-Fi</h3>
+
+                            <Alert color="warning" isOpen={this.state.alertVisible} toggle={this.onAlertDismiss}>{this.state.alertText}</Alert>
+
                             <label className="sr-only" htmlFor="Username">Email address</label>
                             <input type="email" value={this.state.username} onChange={this.handleChange} id="Username" name="username" placeholder="Email address" required autoFocus className="form-control" />
                             <label className="sr-only" htmlFor="Password">Password</label>
                             <input type="password" value={this.state.password} onChange={this.handleChange} id="Password" name="password" placeholder="Password" required className="form-control" />
+
                             <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-primary mt-4 mb-4" value='Log in' />
+
                             <div className="text-center"><h5><Link to='/login/reset'>Forgot password?</Link></h5></div>
                         </form>
                     </div>

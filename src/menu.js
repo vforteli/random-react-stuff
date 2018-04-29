@@ -1,8 +1,16 @@
 ﻿import React, { Component } from 'react';
 import { NavLink, Link, withRouter } from "react-router-dom";
 import { isLoggedIn, logout, getCurrentUser } from './authentication';
+import { UncontrolledDropdown, DropdownItem, DropdownToggle, DropdownMenu, Navbar, Nav, NavbarBrand, NavbarToggler, NavItem, Collapse } from 'reactstrap';
 
 class Menu extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { isOpen: false };
+    }
+
+    toggle = () => { this.setState({ isOpen: !this.state.isOpen }); }
 
     handleLogout = (event) => {
         event.preventDefault();
@@ -13,31 +21,31 @@ class Menu extends Component {
 
     render() {
         return (
-            <nav className="navbar fixed-top navbar-expand-md navbar-light navbar-bg-flexinets" ng-controller="MenuController">
-                <Link to='/' className="navbar-brand"><img src="/Content/img/flexible-networks-nordic_logo-genomskinlig-300x77.png" alt="flexinets logo" /></Link>
-                {isLoggedIn() && <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>}
+            <Navbar className="navbar fixed-top navbar-expand-md navbar-light navbar-bg-flexinets">
+                <NavbarBrand tag={Link} to={'/'}><img src="/Content/img/flexible-networks-nordic_logo-genomskinlig-300x77.png" alt="flexinets logo" /></NavbarBrand>
+                {isLoggedIn() && <NavbarToggler onClick={this.toggle} />}
                 {isLoggedIn() &&
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav mr-auto">
-                            <li className="nav-item"><NavLink to='/users' activeClassName='menuactive' className="nav-link">Users</NavLink></li>
-                            <li className="nav-item"><NavLink to='/subscription' activeClassName='menuactive' className="nav-link">Subscription</NavLink></li>
-                        </ul>
-                        <ul className="navbar-nav">
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#menu" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {getCurrentUser().EmailAddress} <b className="caret"></b>
-                                </a>
-                                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a className="dropdown-item" href="" ng-click="openEditAccountModal()"><i className="fas fa-user"></i> My Account</a>
-                                    <a className="dropdown-item" href="" ng-click="openChangePasswordModal()"><i className="fas fa-key"></i> Change Password</a>
-                                    <div className="dropdown-divider"></div>
-                                    <a className="dropdown-item" href="" onClick={this.handleLogout} > <span className="fas fa-sign-out-alt"></span> Log off</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <Collapse isOpen={this.state.isOpen} navbar>
+                        <Nav className="mr-auto" navbar>
+                            <NavItem><NavLink to='/users' activeClassName='menuactive' className="nav-link">Users</NavLink></NavItem>
+                            <NavItem><NavLink to='/subscription' activeClassName='menuactive' className="nav-link">Subscription</NavLink></NavItem>
+                        </Nav>
+                        <Nav navbar>
+                            <UncontrolledDropdown nav inNavbar>
+                                <DropdownToggle nav caret>
+                                    {getCurrentUser().EmailAddress}
+                                </DropdownToggle>
+                                <DropdownMenu right>
+                                    <DropdownItem tag='a' href='#myaccount'><i className="fas fa-user"></i> My Account</DropdownItem>
+                                    <DropdownItem tag='a' href='#password'><i className="fas fa-key"></i> Change Password</DropdownItem>
+                                    <DropdownItem divider />
+                                    <DropdownItem tag='a' href='#logout' onClick={this.handleLogout}><i className="fas fa-sign-out-alt"></i> Log off</DropdownItem>
+                                </DropdownMenu>
+                            </UncontrolledDropdown>
+                        </Nav>
+                    </Collapse>
                 }
-            </nav>
+            </Navbar>
         );
     }
 }

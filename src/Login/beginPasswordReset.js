@@ -1,11 +1,14 @@
 ﻿import React, { Component } from 'react';
+import { ButtonLoading } from '../components';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 
 class BeginPasswordReset extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            emailaddress: ''
+            emailaddress: '',
+            modal: true
         };
     }
 
@@ -18,34 +21,38 @@ class BeginPasswordReset extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        console.debug('begin reset');        
+        this.setState({ loading: true });
+        console.debug('begin reset');
     }
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <fieldset ng-disabled="loading">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Reset password</h5>
-                            <a className="close" ng-click="$dismiss()">&times;</a>
-                        </div>
-                        <div className="modal-body">
-                            <p className="info">
-                                Enter your email address below and click Reset password.<br />
-                                You will shortly receive an email containing a link to reset your password.
-                            </p>
-                            <div className="form-group required">
-                                <label>Email address</label>
-                                <input className="form-control" type="email" required name="emailaddress" value={this.state.emailaddress} placeholder="email@example.com" />
+            <div>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                    <form onSubmit={this.handleSubmit}>
+                        <fieldset ng-disabled="loading">
+                            <div className="modal-content">
+                                <ModalHeader>
+                                    <h5 className="modal-title">Reset password</h5>
+                                </ModalHeader>
+                                <ModalBody>
+                                    <p className="info">
+                                        Enter your email address below and click Reset password.<br />
+                                        You will shortly receive an email containing a link to reset your password.
+                                    </p>
+                                    <div className="form-group required">
+                                        <label>Email address</label>
+                                        <input className="form-control" type="email" required name="emailaddress" value={this.state.emailaddress} onChange={this.handleChange} placeholder="email@example.com" />
+                                    </div>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit" value='Send reset email'></ButtonLoading> <button type="button" className="btn btn-default">Cancel</button>
+                                </ModalFooter>
                             </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-primary" fln-loading-button="loading" type="submit">Send reset email</button> <button type="button" className="btn btn-default">Cancel</button>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>   
+                        </fieldset>
+                    </form>
+                </Modal>
+            </div>
         );
     }
 }
