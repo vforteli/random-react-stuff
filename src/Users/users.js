@@ -35,7 +35,7 @@ class Users extends Component {
                 }
 
 
-                {(this.state.users && this.state.users.length === 0) &&
+                {this.state.users && this.state.users.length === 0 &&
                     <div ng-if="users.length === 0" className="text-center" ui-sref="users.detail.create()">
                         <h4>No users yet!</h4>
                         <p>Click here to add first user and get started</p>
@@ -44,7 +44,7 @@ class Users extends Component {
                 }
 
 
-                {(this.state.users && this.state.users.length > 0) &&
+                {this.state.users && this.state.users.length > 0 &&
                     <div className="card mb-3">
                         <Route path="/users/create" />
                         <Route path="/users/edit/:id" />

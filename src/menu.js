@@ -12,11 +12,10 @@ class Menu extends Component {
 
     toggle = () => { this.setState({ isOpen: !this.state.isOpen }); }
 
-    handleLogout = (event) => {
+    handleLogout = async (event) => {
         event.preventDefault();
-        logout().then(() => {
-            this.props.history.push("/login");
-        });
+        await logout();
+        this.props.history.push("/login");
     }
 
     render() {

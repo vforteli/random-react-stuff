@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { CreditCardLogo } from './creditcardlogo';
 
 export function Cards(props) {
     return (
@@ -8,7 +9,7 @@ export function Cards(props) {
                 <h5 className="card-subtitle mb-2 text-muted">Your current card</h5>
                 <div className="row">
                     <div className="col-sm-1">
-                        <img alt="cclogo" className="cclogo" credit-card-logo-src="stripe.cards.data[0].Card.brand" />
+                        <CreditCardLogo cardtype={props.cards.data[0].Card.brand} />
                     </div>
                     <div className="col-sm-7">
                         <strong>

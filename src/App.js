@@ -2,31 +2,20 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import axios from 'axios';
 
-import { isLoggedIn, getRefreshedAccessToken, LOGIN_URL, LOGOUT_URL } from './authentication';
+import { isLoggedIn, authInterceptor } from './authentication';
 import Footer from './footer';
 import Menu from './menu';
 import Login from './Login/login';
 import Home from './Home/home';
 import Subscription from './Subscription/subscription';
 import Users from './Users/users';
+import Signup from './Signup/signup';
 
 
 class App extends Component {
     componentWillMount() {
-        // todo refactor this mess
-        axios.interceptors.request.use(async config => {
-            if (config.url.indexOf(LOGIN_URL) >= 0 || config.url.indexOf(LOGOUT_URL) >= 0) {
-                console.debug('withCredentials enabled for domain');
-                config.withCredentials = true;
-            }
-            else {
-                var accessToken = await getRefreshedAccessToken();
-                if (accessToken !== null) {
-                    config.headers.authorization = `Bearer ` + accessToken;
-                }
-            }
-            return config;
-        });
+        axios.defaults.validateStatus = (status) => { return status >= 200 && status < 500; };
+        axios.interceptors.request.use(async config => authInterceptor(config));
     }
 
 
@@ -40,6 +29,7 @@ class App extends Component {
                         <PrivateRoute path='/users' component={Users} />
                         <PrivateRoute path='/subscription' component={Subscription} />
                         <Route path="/login" component={Login} />
+                        <Route path="/signup" component={Signup} />
                     </div>
                     <Footer />
                 </div >
@@ -49,8 +39,7 @@ class App extends Component {
 }
 
 
-const PrivateRoute = ({ component: Component, ...rest }) =>
-    <Route {...rest} render={props => isLoggedIn() ? <Component {...props} /> : <Redirect to={{ pathname: "/login", state: { previousLocation: props.location } }} />} />;
+const PrivateRoute = ({ component: Component, ...rest }) => <Route {...rest} render={props => isLoggedIn() ? <Component {...props} /> : <Redirect to={{ pathname: "/login", state: { previousLocation: props.location } }} />} />;
 
 
 export default App;

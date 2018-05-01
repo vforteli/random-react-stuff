@@ -1,30 +1,33 @@
 ﻿import decode from 'jwt-decode';
 import axios from 'axios';
+import qs from 'qs';
 
 // todo inject, config, something
-export const LOGIN_URL = 'https://authentication.flexinets.se/token';
-export const LOGOUT_URL = 'https://authentication.flexinets.se/logout';
-const ACCOUNT_URL = 'https://authentication.flexinets.se/api/account/';
+//export const LOGIN_URL = 'https://authentication.flexinets.se/token';
+//export const LOGOUT_URL = 'https://authentication.flexinets.se/logout';
+//const ACCOUNT_URL = 'https://authentication.flexinets.se/api/account/';
+export const LOGIN_URL = 'http://localhost:65138/token';
+export const LOGOUT_URL = 'http://localhost:65138/logout';
+export const ACCOUNT_URL = 'http://localhost:65138/api/account/';
 const TOKEN_KEY = 'react_token';
 
-var token = null;
-var currentUser = null;
-var refreshPromise = null;
+
+let token = null;
+let currentUser = null;
+let refreshPromise = null;
 
 
 export async function login(username, password) {
-    console.debug('login');
     clearTokenContext();
 
-    let loginFormData = new FormData();
-    loginFormData.append('grant_type', 'password');
-    loginFormData.append('username', username);
-    loginFormData.append('password', password);
-
-    var response = await axios({
+    const response = await axios({
         method: 'post',
         url: LOGIN_URL,
-        data: loginFormData,
+        data: qs.stringify({
+            'grant_type': 'password',
+            'username': username,
+            'password': password
+        }),
         config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     });
     if (response.status === 200) {
@@ -33,26 +36,55 @@ export async function login(username, password) {
     return response;
 }
 
+
+export async function beginReset(email) {
+    const response = await axios({
+        method: 'post',
+        url: ACCOUNT_URL + 'resetpassword/beginreset/',
+        data: {
+            EmailAddress: email,
+            ReturnUrl: 'https://wifi.flexinets.se/reset/'
+        }
+    });
+    return response;
+}
+
+
+export async function authInterceptor(config) {
+    if (config.url.indexOf(LOGIN_URL) >= 0 || config.url.indexOf(LOGOUT_URL) >= 0) {
+        config.withCredentials = true;
+        return config;
+    }
+    else {
+        const accessToken = await getRefreshedAccessToken();
+        if (accessToken !== null) {
+            config.headers.authorization = `Bearer ` + accessToken;
+        }
+    }
+    return config;
+}
+
+
 export function logout() {
-    console.debug('logout');
     clearTokenContext();
     return axios.post(LOGOUT_URL).then(function (response) {
         console.debug('Logged out');
     });
 }
 
+
 export function isLoggedIn() {
-    console.debug('isLoggedIn');
-    let token = getToken();
+    const token = getToken();
     return token !== null && token.refresh_token_expires > new Date().getTime() / 1000;
 }
+
 
 export function getCurrentUser() {
     if (currentUser === null) {
         let token = getToken();
         if (token !== null) {
             try {
-                var claims = decode(token.access_token);
+                const claims = decode(token.access_token);
                 currentUser = {
                     EmailAddress: claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
                     FirstName: claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
@@ -70,6 +102,7 @@ export function getCurrentUser() {
     return currentUser;
 }
 
+
 export async function getRefreshedAccessToken() {
     let token = getToken();
     if (token !== null) {
@@ -84,12 +117,12 @@ export async function getRefreshedAccessToken() {
 }
 
 
+
 /**
  * Save the token to localStorage
  * @param {any} tokenJson
  */
 function setToken(tokenJson) {
-    console.debug('saving token');
     localStorage.setItem(TOKEN_KEY, JSON.stringify(tokenJson));
     token = tokenJson;
 }
@@ -102,9 +135,6 @@ function getToken() {
     if (token === null) {
         console.debug('Getting token from localStorage');
         token = JSON.parse(localStorage.getItem(TOKEN_KEY));
-    }
-    else {
-        console.debug('using token variable');
     }
     return token;
 }
@@ -121,13 +151,10 @@ async function refreshToken() {
 
     console.debug('Starting new token refresh');
 
-    let loginFormData = new FormData();
-    loginFormData.append('grant_type', 'refresh_token');
-
     refreshPromise = axios({
         method: 'post',
         url: LOGIN_URL,
-        data: loginFormData,
+        data: qs.stringify({ 'grant_type': 'refresh_token' }),
         config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     }).then(response => {
         refreshPromise = null;

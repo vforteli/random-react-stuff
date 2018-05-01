@@ -17,9 +17,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        if (isLoggedIn()) {
-            this.props.history.push("/");
-        }
+        if (isLoggedIn()) { this.props.history.push("/"); }
     }
 
     handleChange = (event) => {
@@ -29,33 +27,36 @@ class Login extends Component {
         this.setState({ [name]: value });
     }
 
-    handleSubmit = async event => {
+    handleLogin = async event => {
         event.preventDefault();
         this.setState({ loading: true });
-        var response = await login(this.state.username, this.state.password);
+        const response = await login(this.state.username, this.state.password);
         this.setState({ loading: false });
         if (response.status === 200) {
             if (this.props.location && this.props.location.state && this.props.location.state.previousLocation && this.props.location.state.previousLocation.pathname) {
                 this.props.history.push(this.props.location.state.previousLocation.pathname);
             }
-            else {
-                this.props.history.push("/");
-            }
+            else { this.props.history.push("/"); }
         }
-        else {
-            this.setState({ alertVisible: true, alertText: response.data.error });
-        }
+        else { this.setState({ alertVisible: true, alertText: response.data.error }); }
 
     }
 
+
     onAlertDismiss = () => { this.setState({ alertVisible: false }); }
+
+
+    onClosed = (event) => {
+        console.debug('modal closed');
+        console.debug(event);
+    }
 
     render() {
         return (
             <div className="col-md-6 offset-md-3">
                 <div className="card mt-3">
                     <div className="card-body">
-                        <form method="post" onSubmit={this.handleSubmit} className="form-signin">
+                        <form method="post" onSubmit={this.handleLogin} className="form-signin">
                             <h3>Log in to Flexinets Global Wi-Fi</h3>
 
                             <Alert color="warning" isOpen={this.state.alertVisible} toggle={this.onAlertDismiss}>{this.state.alertText}</Alert>
@@ -71,7 +72,7 @@ class Login extends Component {
                         </form>
                     </div>
                 </div>
-                <Route path="/login/reset" component={BeginPasswordReset} />
+                <Route path="/login/reset" render={props => <BeginPasswordReset {...props} onClosed={this.onClosed} />} />
             </div >
         );
     }

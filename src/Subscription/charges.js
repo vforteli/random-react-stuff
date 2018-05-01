@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import moment from 'moment';
+import { CreditCardLogo } from './creditcardlogo';
 
 
 export function Charges(props) {
@@ -21,7 +22,7 @@ export function Charges(props) {
                                         <small>Date: {moment.unix(charge.created).format('YYYY MMMM DD')}</small>
                                     </div>
                                     <div className="col-sm-7">
-                                        <img alt="cclogo" className="cclogo" credit-card-logo-src="{charge.source.Card.brand}" />
+                                        <CreditCardLogo cardtype={charge.source.Card.brand} />
                                         {charge.source.Card.brand}  ****  {charge.source.Card.last4} <br />
                                         <small>Expires:  {charge.source.Card.exp_month} / {charge.source.Card.exp_year}</small>
                                     </div>
