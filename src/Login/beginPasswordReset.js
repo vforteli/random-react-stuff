@@ -37,28 +37,26 @@ class BeginPasswordReset extends Component {
 
     render() {
         return (
-            <div>
-                <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss} className={this.props.className}>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="modal-content">
-                            <ModalHeader>Reset password</ModalHeader>
-                            <ModalBody>
-                                <p>
-                                    Enter your email address below and click Reset password.<br />
-                                    You will shortly receive an email containing a link to reset your password.
+            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss} className={this.props.className}>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="modal-content">
+                        <ModalHeader>Reset password</ModalHeader>
+                        <ModalBody>
+                            <p>
+                                Enter your email address below and click Reset password.<br />
+                                You will shortly receive an email containing a link to reset your password.
                                 </p>
-                                <div className="form-group required">
-                                    <label>Email address</label>
-                                    <input className="form-control" type="email" required name="emailaddress" value={this.state.emailaddress} onChange={this.handleChange} placeholder="email@example.com" />
-                                </div>
-                            </ModalBody>
-                            <ModalFooter>
-                                <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit" value='Send reset email' /> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
-                            </ModalFooter>
-                        </div>
-                    </form>
-                </Modal>
-            </div>
+                            <div className="form-group required">
+                                <label>Email address</label>
+                                <input className="form-control" type="email" required name="emailaddress" value={this.state.emailaddress} onChange={this.handleChange} placeholder="email@example.com" />
+                            </div>
+                        </ModalBody>
+                        <ModalFooter>
+                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit" value='Send reset email' /> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
+                        </ModalFooter>
+                    </div>
+                </form>
+            </Modal>
         );
     }
 }
