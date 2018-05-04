@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import axios from 'axios';
 
-import { isLoggedIn, authInterceptor } from './authentication';
-import Footer from './footer';
+import { isLoggedIn, authInterceptor } from './Shared/authentication';
+import Footer from './Shared/footer';
 import Menu from './menu';
 import Login from './Login/login';
 import Home from './Home/home';

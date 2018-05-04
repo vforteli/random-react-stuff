@@ -133,7 +133,6 @@ function setToken(tokenJson) {
  */
 function getToken() {
     if (token === null) {
-        console.debug('Getting token from localStorage');
         token = JSON.parse(localStorage.getItem(TOKEN_KEY));
     }
     return token;

@@ -2,11 +2,12 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import StripeCheckout from 'react-stripe-checkout';
 
-import { TextInput, TextAreaInput } from '../TextInput';
-import { ButtonLoading } from '../components';
+import { TextInput, TextAreaInput } from '../Shared/TextInput';
+import { ButtonLoading } from '../Shared/components';
 import TermsAndConditions from './TermsAndConditions';
 import { CountrySelect } from './CountrySelect';
 import { ProcessingPayment } from './ProcessingPayment';
+import { OrderSummary } from './OrderSummary';
 
 
 class Signup extends Component {
@@ -22,6 +23,7 @@ class Signup extends Component {
 
         this.state = {
             name: '',
+            companyname: '',
             email: '',
             password: '',
             postcode: '',
@@ -76,10 +78,14 @@ class Signup extends Component {
 
 
     handleChange = (event) => {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({ [name]: value });
+        let value = undefined;
+        switch (event.target.type) {
+            case 'checkbox': value = event.target.checked; break;
+            case 'number': value = parseInt(event.target.value); break;
+            default: value = event.target.value;
+        }
+
+        this.setState({ [event.target.name]: value });
     }
 
 
@@ -163,15 +169,11 @@ class Signup extends Component {
     }
 
 
-    openModal = (event) => {
+    onModalToggle = (event) => {
         event.preventDefault();
-        this.setState({ modalOpen: true });
+        this.setState({ modalOpen: !this.state.modalOpen });
     }
 
-
-    onModalToggle = () => {
-        this.setState({ modalOpen: false });
-    }
 
 
     render() {
@@ -181,25 +183,25 @@ class Signup extends Component {
                     <h2 className="mt-2 mb-2">Flexinets Global Wi-Fi</h2>
 
                     {!this.state.processingPayment &&
-                        <form method="post" onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmit}>
                             <div className="card mb-3">
                                 <div className="card-body m-2">
                                     <h3 className="text-center">Choose subscription type</h3>
-                                    <div className="row">
-                                        <div className="col btn-policy">
-                                            <input type="radio" className='sr-only' name="signupType" required />
+                                    <div className="row pointer">
+                                        <div className={this.state.signupType === 'SingleUser' ? 'col btn-policy btn-policy-active' : 'col btn-policy'} onClick={(e) => this.setState({ signupType: 'SingleUser', licenseCount: 1 })} >
+                                            <input type="radio" className='sr-only' name="signupType" value="SingleUser" onChange={this.handleChange} required />
                                             <h4>Single user</h4>
-                                            <h5>{this.getSelectedProduct().price} {this.state.currency} / Month</h5>
+                                            <h5>{this.getSelectedProduct().price} {this.state.currency.toUpperCase()} / Month</h5>
                                             <small>Excluding VAT</small>
                                             <p className="text-muted">
                                                 Sign up as a single user<br />
                                                 Connect up to 3 personal devices
-                                        </p>
+                                            </p>
                                         </div>
-                                        <div className="col btn-policy">
-                                            <input type="radio" className='sr-only' name="signupType" required />
+                                        <div className={this.state.signupType === 'Admin' ? 'col btn-policy btn-policy-active' : 'col btn-policy'} onClick={(e) => this.setState({ signupType: 'Admin' })} >
+                                            <input type="radio" className='sr-only' name="signupType" value="Admin" onChange={this.handleChange} required />
                                             <h4>Multiple users</h4>
-                                            <h5>{this.getSelectedProduct().price} {this.state.currency} / User / Month</h5>
+                                            <h5>{this.getSelectedProduct().price} {this.state.currency.toUpperCase()} / User / Month</h5>
                                             <small>Excluding VAT</small>
                                             <p className="text-muted">
                                                 Sign up and manage multiple users<br />
@@ -211,30 +213,32 @@ class Signup extends Component {
 
 
                                 <div className="card-body m-2">
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <div className="form-group required">
-                                                <label>Number of users</label>
-                                                <div className="input-group number-spinner">
-                                                    <span className="input-group-btn">
-                                                        <button type="button" className="btn btn-default btn-info" onClick={(e) => { this.setState({ licenseCount: this.state.licenseCount - 1 }); }} ><span className="fas fa-minus"></span></button>
-                                                    </span>
-                                                    <input type="number" step="1" required className="form-control text-center no-spinners" name='licenseCount' onChange={this.handleChange} placeholder="Number of device licenses" value={this.state.licenseCount} min="1" max="500" />
-                                                    <span className="input-group-btn">
-                                                        <button type="button" className="btn btn-default btn-info" onClick={(e) => { this.setState({ licenseCount: this.state.licenseCount + 1 }); }} > <span className="fas fa-plus"></span></button>
-                                                    </span>
+                                    {this.state.signupType === 'Admin' &&
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="form-group required">
+                                                    <label>Number of users</label>
+                                                    <div className="input-group number-spinner">
+                                                        <span className="input-group-btn">
+                                                            <button type="button" className="btn btn-default btn-info" onClick={(e) => { this.setState({ licenseCount: this.state.licenseCount - 1 }); }} ><span className="fas fa-minus"></span></button>
+                                                        </span>
+                                                        <input type="number" step="1" required className="form-control text-center no-spinners" name='licenseCount' onChange={this.handleChange} placeholder="Number of device licenses" value={this.state.licenseCount} min="1" max="500" />
+                                                        <span className="input-group-btn">
+                                                            <button type="button" className="btn btn-default btn-info" onClick={(e) => { this.setState({ licenseCount: this.state.licenseCount + 1 }); }} > <span className="fas fa-plus"></span></button>
+                                                        </span>
+                                                    </div>
+                                                    <small className="text-muted">A user can install and connect up to 3 personal devices simultaneously</small>
                                                 </div>
-                                                <small className="text-muted">A user can install and connect up to 3 personal devices simultaneously</small>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="bs-callout bs-callout-info">
+                                                    <h4>Orders over 20 users</h4>
+                                                    <p className="text-muted">Please contact us for a corporate offer</p>
+                                                    <a href="https://www.flexinets.eu/wifi-offer-contact-en/" target="_blank">Contact us <i className="fas fa-external-link-alt"></i></a>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <div className="bs-callout bs-callout-info">
-                                                <h4>Orders over 20 users</h4>
-                                                <p className="text-muted">Please contact us for a corporate offer</p>
-                                                <a href="https://www.flexinets.eu/wifi-offer-contact-en/" target="_blank">Contact us <i className="fas fa-external-link-alt"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    }
 
 
                                     <hr />
@@ -316,7 +320,7 @@ class Signup extends Component {
 
                                                 <div className="list-group mb-2">
                                                     <label className={this.state.paymentMethod === 'CreditCard' ? 'list-group-item list-group-item-action shop-list-active' : 'list-group-item list-group-item-action'}>
-                                                        <input type="radio" name="paymentMethod" defaultChecked required value="CreditCard" onChange={this.handleChange} /> <span className="h5"> Credit Card</span> <img src="/Content/img/cc.svg" className="cclogo" /> <img className="float-right" src="/Content/img/powered_by_stripe.png" alt="powered by stripe" />
+                                                        <input type="radio" name="paymentMethod" defaultChecked required value="CreditCard" onChange={this.handleChange} /> <span className="h5"> Credit Card</span> <img src="/Content/img/cc.svg" alt="cclogo" className="cclogo" /> <img className="float-right" src="/Content/img/powered_by_stripe.png" alt="powered by stripe" />
                                                     </label>
                                                     <label className={this.state.paymentMethod === 'Invoice' ? 'list-group-item list-group-item-action shop-list-active' : 'list-group-item list-group-item-action'}>
                                                         <input type="radio" name="paymentMethod" required value="Invoice" onChange={this.handleChange} /> <span className="h5"> Invoice</span> <i className="far fa-envelope"></i> <small className="float-right text-muted">Invoices sent by email {this.state.country === 'DK' && 'or EAN'}</small>
@@ -328,39 +332,13 @@ class Signup extends Component {
 
                                     <div className="row">
                                         <div className="col-sm-12">
-                                            <table className="table table-striped users-table">
-                                                <thead>
-                                                    <tr>
-                                                        <td>Product</td>
-                                                        <td className="text-right">Quantity</td>
-                                                        <td className="text-right">Price</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{this.getSelectedProduct().title}</td>
-                                                        <td className="text-right">{this.state.licenseCount}</td>
-                                                        <td className="fln-price">{this.getSum()} {this.state.currency}</td>
-                                                    </tr>
-                                                    {this.state.isEuCountry &&
-                                                        <tr>
-                                                            <td colSpan="2">VAT <small className="text-muted">(For EU VAT exemption, fill in a VAT number)</small></td>
-                                                            <td className="fln-price">{this.getVat()} {this.state.currency}</td>
-                                                        </tr>
-                                                    }
-                                                    <tr>
-                                                        <td colSpan="2">Total</td>
-                                                        <td className="fln-price">{this.getSum() + this.getVat()} {this.state.currency}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <OrderSummary quantity={this.state.licenseCount} price={this.getSelectedProduct().price} sum={this.getSum()} title={this.getSelectedProduct().title} vat={this.getVat()} currency={this.state.currency} isEuCountry={this.state.isEuCountry} />
                                         </div>
                                     </div>
 
                                     <div className="custom-control custom-checkbox m-4">
                                         <input type="checkbox" className="custom-control-input" name='accepttermsandconditions' id="accepttoc" required value={this.state.accepttermsandconditions} onChange={this.handleChange} />
-                                        <label className="custom-control-label" htmlFor="accepttoc">I have read and accept the</label>
-                                        <a href="" onClick={this.openModal}> Terms & Conditions</a>
+                                        <label className="custom-control-label" htmlFor="accepttoc">I have read and accept the</label> <a href="" onClick={this.onModalToggle}>Terms & Conditions</a>
                                     </div>
 
                                     {this.state.stripeKey &&
@@ -388,7 +366,7 @@ class Signup extends Component {
                 </div>
 
 
-                <TermsAndConditions onToggle={this.onModalToggle} isOpen={this.state.modalOpen} onClick={this.openModal} />
+                <TermsAndConditions onToggle={this.onModalToggle} isOpen={this.state.modalOpen} />
             </Fragment>
         );
     }

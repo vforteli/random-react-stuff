@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { NavLink, Link, withRouter } from "react-router-dom";
-import { isLoggedIn, logout, getCurrentUser } from './authentication';
+import { isLoggedIn, logout, getCurrentUser } from './Shared/authentication';
 import { UncontrolledDropdown, DropdownItem, DropdownToggle, DropdownMenu, Navbar, Nav, NavbarBrand, NavbarToggler, NavItem, Collapse } from 'reactstrap';
 
 class Menu extends Component {

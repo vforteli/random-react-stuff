@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
-import { login, isLoggedIn } from '../authentication';
+import { login, isLoggedIn } from '../Shared/authentication';
 import { Route, Link, withRouter } from "react-router-dom";
 import BeginPasswordReset from './beginPasswordReset';
-import { ButtonLoading } from '../components';
+import { ButtonLoading } from '../Shared/components';
 import { Alert } from 'reactstrap';
 
 

@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
-import { ButtonLoading } from '../components';
+import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { beginReset } from '../authentication';
+import { beginReset } from '../Shared/authentication';
 
 
 class BeginPasswordReset extends Component {
