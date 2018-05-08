@@ -8,6 +8,8 @@ import TermsAndConditions from './TermsAndConditions';
 import { CountrySelect } from './CountrySelect';
 import { ProcessingPayment } from './ProcessingPayment';
 import { OrderSummary } from './OrderSummary';
+import TextInputValidated from '../Shared/TextInputValidated';
+import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
 
 
 class Signup extends Component {
@@ -94,10 +96,10 @@ class Signup extends Component {
         this.setState({ email: email });
         if (email !== undefined) {
             //$scope.checkingEmailAvailability = true;
-            axios.get('https://authentication.flexinets.se/api/checkemailavailability?email=' + email).then((response) => { // todo refactor and inject url
-                //$scope.forms.subscribeform.email.$setValidity("emailavailable", response.data.available);
-                console.debug(response);
-            });
+            //axios.get('https://authentication.flexinets.se/api/checkemailavailability?email=' + email).then((response) => { // todo refactor and inject url
+            //$scope.forms.subscribeform.email.$setValidity("emailavailable", response.data.available);
+            //  console.debug(response);
+            //});
         }
     }
 
@@ -183,7 +185,7 @@ class Signup extends Component {
                     <h2 className="mt-2 mb-2">Flexinets Global Wi-Fi</h2>
 
                     {!this.state.processingPayment &&
-                        <form onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmit} noValidate>
                             <div className="card mb-3">
                                 <div className="card-body m-2">
                                     <h3 className="text-center">Choose subscription type</h3>
@@ -246,10 +248,10 @@ class Signup extends Component {
 
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <TextInput type='email' name='email' value={this.state.email} onChange={this.handleEmailChange} required placeholder='email@example.com' label='Email' />
+                                            <TextInputValidated type='email' name='email' onChange={this.handleEmailChange} value={this.state.email} label='Email' required placeholder='email@example.com' />
                                         </div>
                                         <div className="col-md-6">
-                                            <TextInput type="password" label='Password' name='password' placeholder='Create a password' required value={this.state.password} onChange={this.handleChange} />
+                                            <TextInputValidated type="password" label='Password' name='password' placeholder='Create a password' required value={this.state.password} onChange={this.handleChange} />
                                         </div>
                                     </div>
 
@@ -260,21 +262,21 @@ class Signup extends Component {
 
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <TextInput type="text" label='Name' name='name' value={this.state.name} onChange={this.handleChange} placeholder='Firstname Lastname' required />
+                                            <TextInputValidated type="text" label='Name' name='name' value={this.state.name} onChange={this.handleChange} placeholder='Firstname Lastname' required />
                                         </div>
                                         <div className="col-md-6">
-                                            <TextInput type="text" label='Company name' name='companyname' value={this.state.companyname} onChange={this.handleChange} placeholder='Company name' />
+                                            <TextInputValidated type="text" label='Company name' name='companyname' value={this.state.companyname} onChange={this.handleChange} placeholder='Company name' />
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <TextAreaInput rows='1' label='Street address' name='streetaddress' value={this.state.streetaddress} onChange={this.handleChange} placeholder='Street address' required />
+                                            <TextAreaInputValidated rows='1' label='Street address' name='streetaddress' value={this.state.streetaddress} onChange={this.handleChange} placeholder='Street address' required />
                                         </div>
                                         <div className="col-md-3">
-                                            <TextInput type="text" label='Postcode' name='postcode' value={this.state.poastcode} onChange={this.handleChange} placeholder='Postcode / ZIP' required />
+                                            <TextInputValidated type="text" label='Postcode' name='postcode' value={this.state.poastcode} onChange={this.handleChange} placeholder='Postcode / ZIP' required />
                                         </div>
                                         <div className="col-md-3">
-                                            <TextInput type="text" label='City' name='city' value={this.state.city} onChange={this.handleChange} placeholder='City' required />
+                                            <TextInputValidated type="text" label='City' name='city' value={this.state.city} onChange={this.handleChange} placeholder='City' required />
                                         </div>
                                     </div>
                                     <div className="row">
@@ -289,7 +291,7 @@ class Signup extends Component {
                                     {this.state.country === 'DK' &&
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <TextInput type="text" label='EAN Number' name='ean' placeholder='EAN Number' />
+                                                <TextInputValidated type="text" label='EAN Number' name='ean' placeholder='EAN Number' />
                                             </div>
                                         </div>
                                     }
@@ -298,8 +300,7 @@ class Signup extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>VAT Number <small>(Optional)</small></label>
-                                                    <input type="text" className="form-control" value={this.state.vatnumber} onChange={this.handleVatNumberChange} placeholder={this.state.country + '00000000'} />
+                                                    <TextInputValidated type="text" label='VAT Number' className="form-control" value={this.state.vatnumber} onChange={this.handleVatNumberChange} placeholder={this.state.country + '00000000'} />
                                                     {this.state.viesName}
                                                     {this.state.checkingVatNumber && <p>Checking VAT Number...</p>}
                                                     {this.state.vatnumber && !this.state.vatExempt && !this.state.checkingVatNumber && <p>This does not appear to be an EU vat number</p>}
