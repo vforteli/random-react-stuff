@@ -1,25 +1,42 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Route, Link } from 'react-router-dom';
+import UserDetail from './UserDetail';
+import DeleteUser from './DeleteUser';
 
 class Users extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             users: null
         };
     }
 
-    componentDidMount() {
-        // todo refactor url
-        axios.get('http://localhost:64730/api/users/').then(response => {
+    componentWillMount() {
+        axios.get('http://localhost:64730/api/users/').then(response => {   // todo refactor url
             if (response.status === 200) {
                 this.setState({ users: response.data });
             }
         }, function (response) {
             console.debug('Couldnt load users...');
         });
+    }
+
+
+    onClosed = (result) => {
+        if (result) {
+            // todo reload
+            console.debug('reload users');
+        }
+        this.props.history.push('/users');
+    }
+
+
+    onDeleteUserClosed = (result) => {
+        if (result) {
+            this.setState({ users: this.state.users.filter(o => o.UserID !== result) });
+        }
+        this.props.history.push('/users');
     }
 
 
@@ -77,35 +94,35 @@ class Users extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <UserList items={this.state.users} />
+                                    {this.state.users.map((user) =>
+                                        <tr key={user.UserID}>
+                                            <td className="wrapcolumn"><input type="checkbox" ng-model="user.selected" /></td>
+                                            <td ui-sref="users.detail.edit({ userId: user.UserID })" className="pointer">
+                                                <div className="row">
+                                                    <div className="col-md-5"><a href="">{user.Fullname}</a></div>
+                                                    <div className="col-md-5">{user.EmailAddress}</div>
+                                                    <div className="col-md-2">{user.Enabled ? <span className="label label-success">Active</span> : <span className="label label-danger">Suspended</span>}</div>
+                                                </div>
+                                            </td>
+                                            <td className="wrapcolumn">
+                                                <Link className="btn btn-info" to={'/users/edit/' + user.UserID}><i className="fas fa-edit fa-fw"></i></Link>{' '}
+                                                <Link className="btn btn-danger" to={'/users/delete/' + user.UserID}><i className="fas fa-times fa-fw"></i></Link>
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 }
+
+                <Route path="/users/create" render={props => <UserDetail {...props} onClosed={this.onClosed} />} />
+                <Route path="/users/edit/:userid" render={props => <UserDetail {...props} onClosed={this.onClosed} />} />
+                <Route path="/users/delete/:userid" render={props => <DeleteUser {...props} onClosed={this.onDeleteUserClosed} />} />
             </div>
         );
     }
 }
-
-const UserList = props =>
-    props.items.map((user) =>
-        <tr key={user.UserID}>
-            <td className="wrapcolumn"><input type="checkbox" ng-model="user.selected" /></td>
-            <td ui-sref="users.detail.edit({ userId: user.UserID })" className="pointer">
-                <div className="row">
-                    <div className="col-md-5"><a href="">{user.Fullname}</a></div>
-                    <div className="col-md-5">{user.EmailAddress}</div>
-                    <div className="col-md-2">{user.Enabled ? <span className="label label-success">Active</span> : <span className="label label-danger">Suspended</span>}</div>
-                </div>
-            </td>
-            <td className="wrapcolumn">
-                <Link className="btn btn-info" to={'/users/edit/' + user.UserID}><i className="fas fa-edit fa-fw"></i></Link>{' '}
-                <button type="button" className="btn btn-danger" ng-click="openDeleteUserModal(user, users)"><span className="fas fa-times fa-fw"></span></button>
-            </td>
-        </tr>
-    );
-
 
 
 export default Users;
