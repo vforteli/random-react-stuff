@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import ValidatedInput from './ValidatedInput';
 
 class TextAreaInputValidated extends ValidatedInput {

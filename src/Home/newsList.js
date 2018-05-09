@@ -9,7 +9,7 @@ class NewsList extends Component {
         this.state = { newsItems: null };
     }
 
-    async componentDidMount() {
+    async componentWillMount() {
         const response = await axios.get('https://api.flexinets.se/api/news/');
         this.setState({ newsItems: response.data });
     }

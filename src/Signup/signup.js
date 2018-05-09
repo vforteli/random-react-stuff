@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import StripeCheckout from 'react-stripe-checkout';
 
-import { TextInput, TextAreaInput } from '../Shared/TextInput';
 import { ButtonLoading } from '../Shared/components';
 import TermsAndConditions from './TermsAndConditions';
 import { CountrySelect } from './CountrySelect';

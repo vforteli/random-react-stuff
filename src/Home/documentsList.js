@@ -9,7 +9,7 @@ class DocumentsList extends Component {
         this.state = { documentItems: null };
     }
 
-    async componentDidMount() {
+    async componentWillMount() {
         const response = await axios.get('https://documents.flexinets.se/documents/?number=10');
         this.setState({ documentItems: response.data });
     }
