@@ -42,7 +42,7 @@ class Signup extends Component {
         };
     }
 
-    async componentDidMount() {
+    async componentWillMount() {
         axios.get('http://localhost:64730/api/settings/stripe').then((response) => {
             this.setState({ stripeKey: response.data });
         });
@@ -82,7 +82,7 @@ class Signup extends Component {
         let value = undefined;
         switch (event.target.type) {
             case 'checkbox': value = event.target.checked; break;
-            case 'number': value = parseInt(event.target.value); break;
+            case 'number': value = parseInt(event.target.value, 10); break;
             default: value = event.target.value;
         }
 
@@ -235,7 +235,7 @@ class Signup extends Component {
                                                 <div className="bs-callout bs-callout-info">
                                                     <h4>Orders over 20 users</h4>
                                                     <p className="text-muted">Please contact us for a corporate offer</p>
-                                                    <a href="https://www.flexinets.eu/wifi-offer-contact-en/" target="_blank">Contact us <i className="fas fa-external-link-alt"></i></a>
+                                                    <a href="https://www.flexinets.eu/wifi-offer-contact-en/" target="_blank" rel="noopener noreferrer">Contact us <i className="fas fa-external-link-alt"></i></a>
                                                 </div>
                                             </div>
                                         </div>

@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from 'axios';
 
-import { isLoggedIn, authInterceptor } from './Shared/authentication';
-import Footer from './Shared/footer';
+import { authInterceptor } from './Shared/authentication';
+import { PrivateRoute } from './Shared/PrivateRoute';
+import Footer from './Shared/Footer';
 import Menu from './menu';
 import Login from './Login/login';
 import Home from './Home/home';
 import Subscription from './Subscription/subscription';
 import Users from './Users/users';
 import Signup from './Signup/signup';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 class App extends Component {
@@ -32,14 +35,12 @@ class App extends Component {
                         <Route path="/signup" component={Signup} />
                     </div>
                     <Footer />
+                    <ToastContainer />
                 </div >
             </Router>
         );
     }
 }
-
-
-const PrivateRoute = ({ component: Component, ...rest }) => <Route {...rest} render={props => isLoggedIn() ? <Component {...props} /> : <Redirect to={{ pathname: "/login", state: { previousLocation: props.location } }} />} />;
 
 
 export default App;

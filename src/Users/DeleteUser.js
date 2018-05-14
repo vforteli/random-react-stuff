@@ -2,6 +2,7 @@
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 class DeleteUser extends Component {
@@ -9,7 +10,7 @@ class DeleteUser extends Component {
         super(props);
 
         this.state = {
-            userId: parseInt(props.match.params.userid),
+            userId: parseInt(props.match.params.userid, 10),
             modal: true,
             result: false
         };
@@ -19,7 +20,7 @@ class DeleteUser extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
         this.setState({ loading: true });
-
+        toast.info("User deleted");
         this.setState({ result: this.state.userId });
         this.dismiss();
         axios.delete('/api/users/' + this.state.userId).then(function (response) {
