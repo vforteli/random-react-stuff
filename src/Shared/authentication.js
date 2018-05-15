@@ -73,6 +73,10 @@ export function logout() {
 }
 
 
+/**
+ * Check if a user is logged in.
+ * Assumed to be logged in if a token exists, and the refresh token has not expired
+ */
 export function isLoggedIn() {
     const token = getToken();
     return token !== null && token.refresh_token_expires > new Date().getTime() / 1000;
@@ -81,7 +85,7 @@ export function isLoggedIn() {
 
 export function getCurrentUser() {
     if (currentUser === null) {
-        let token = getToken();
+        const token = getToken();
         if (token !== null) {
             try {
                 const claims = decode(token.access_token);
@@ -104,7 +108,7 @@ export function getCurrentUser() {
 
 
 export async function getRefreshedAccessToken() {
-    let token = getToken();
+    const token = getToken();
     if (token !== null) {
         if (isTokenExpired(token.access_token)) {
             console.debug('Token has expired, start refresh maybe');
@@ -120,7 +124,7 @@ export async function getRefreshedAccessToken() {
 
 /**
  * Save the token to localStorage
- * @param {any} tokenJson
+ * @param {string} tokenJson
  */
 function setToken(tokenJson) {
     localStorage.setItem(TOKEN_KEY, JSON.stringify(tokenJson));
@@ -187,7 +191,7 @@ function clearTokenContext() {
 
 /**
  * Check if an access token has expired
- * @param {any} jwtToken
+ * @param {string} jwtToken
  */
 function isTokenExpired(jwtToken) {
     const token = decode(jwtToken);

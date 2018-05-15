@@ -14,7 +14,7 @@ import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
 class Signup extends Component {
     constructor(props) {
         super(props);
-
+        console.debug(this.handleEmailChange);
         let product = 'ipass_monthly_eur_25';
         let currency = "eur";
         if (window.location.hostname === 'wifi.flexinets.se') {
