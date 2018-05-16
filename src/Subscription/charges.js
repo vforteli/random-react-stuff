@@ -19,7 +19,8 @@ export function Charges(props) {
                                 <div className="row">
                                     <div className="col-sm-5">
                                         Amount:  {charge.amount / 100} {charge.currency.toUpperCase()} <br />
-                                        <small>Date: {moment.unix(charge.created).format('YYYY MMMM DD')}</small>
+                                        <small>Date: {moment.unix(charge.created).format('YYYY MMMM DD')}</small><br />
+                                        <small>Status: {charge.status}</small>
                                     </div>
                                     <div className="col-sm-7">
                                         <CreditCardLogo cardtype={charge.source.Card.brand} />

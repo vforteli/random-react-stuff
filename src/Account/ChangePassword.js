@@ -3,7 +3,8 @@ import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import TextInputValidated from '../Shared/TextInputValidated';
 import axios from 'axios';
-import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
+import { toast } from 'react-toastify';
+import { ACCOUNT_URL } from '../Shared/authentication';
 
 
 class ChangePassword extends Component {
@@ -27,9 +28,21 @@ class ChangePassword extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
         this.setState({ loading: true });
-        this.setState({ result: this.state.userId });
-        this.setState({ loading: false });
-        this.dismiss();
+
+        const response = await axios.post(ACCOUNT_URL + 'changepassword/', {
+            oldpassword: this.state.oldpassword,
+            password: this.state.password,
+            passwordconfirm: this.state.passwordconfirm
+        });
+
+        if (response.status === 200) {
+            toast.success('Your password has been changed');
+            this.setState({ result: this.state.userId, loading: false });
+            this.dismiss();
+        }
+        else {
+            console.debug(response);
+        }
     }
 
 
@@ -41,7 +54,7 @@ class ChangePassword extends Component {
 
     render() {
         return (
-            <Modal onClosed={this.onClosed} isOpen={this.props.isOpen} toggle={this.dismiss}>
+            <Modal onClosed={this.onClosed} isOpen={this.props.isOpen} toggle={this.dismiss} >
                 <form onSubmit={this.handleSubmit} noValidate>
                     <div className="modal-content">
                         <ModalHeader>Change password</ModalHeader>

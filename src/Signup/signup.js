@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import StripeCheckout from 'react-stripe-checkout';
+import { debounce } from 'lodash';
 
 import { ButtonLoading } from '../Shared/components';
 import TermsAndConditions from './TermsAndConditions';
@@ -9,12 +10,16 @@ import { ProcessingPayment } from './ProcessingPayment';
 import { OrderSummary } from './OrderSummary';
 import TextInputValidated from '../Shared/TextInputValidated';
 import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
+import { checkEmailAvailability } from '../Shared/authentication';
 
 
 class Signup extends Component {
     constructor(props) {
         super(props);
-        console.debug(this.handleEmailChange);
+
+        this.validateEmail = debounce(this.validateEmail, 700);
+        this.checkVatNumber = debounce(this.checkVatNumber, 700);
+
         let product = 'ipass_monthly_eur_25';
         let currency = "eur";
         if (window.location.hostname === 'wifi.flexinets.se') {
@@ -91,14 +96,20 @@ class Signup extends Component {
 
 
     handleEmailChange = (event) => {
-        const email = event.target.value;
-        this.setState({ email: email });
-        if (email !== undefined) {
-            //$scope.checkingEmailAvailability = true;
-            //axios.get('https://authentication.flexinets.se/api/checkemailavailability?email=' + email).then((response) => { // todo refactor and inject url
-            //$scope.forms.subscribeform.email.$setValidity("emailavailable", response.data.available);
-            //  console.debug(response);
-            //});
+        event.persist();
+        this.setState({ email: event.target.value });
+        this.validateEmail(event);
+    }
+
+    validateEmail = async (event) => {
+        var result = await checkEmailAvailability(event.target.value);
+        if (result) {
+            console.debug('clear error');
+            event.target.setCustomValidity('');
+        }
+        else {
+            console.debug('set error');
+            event.target.setCustomValidity('Email already registered');
         }
     }
 
@@ -119,9 +130,14 @@ class Signup extends Component {
     }
 
 
-    handleVatNumberChange = async (event) => {
+    handleVatNumberChange = (event) => {
+        event.persist();
+        this.setState({ vatnumber: event.target.value });
+        this.checkVatNumber(event);
+    }
+
+    checkVatNumber = async (event) => {
         this.setState({
-            vatnumber: event.target.value,
             checkingVatNumber: true,
             vatExempt: false,
             viesName: ''
@@ -144,15 +160,18 @@ class Signup extends Component {
         this.setState({ checkingVatNumber: false });
     }
 
-
     handleSubmit = (event) => {
         event.preventDefault();
-        if (this.state.paymentMethod !== 'CreditCard') {
-            this.setState({ loading: true, processingPayment: true });
-            setTimeout(() => {
-                this.setState({ loading: false, processingPayment: false });
-                this.createAccount();
-            }, 3000);
+        const formValid = event.target.checkValidity();
+        console.debug(formValid);
+        if (formValid) {
+            if (this.state.paymentMethod !== 'CreditCard') {
+                this.setState({ loading: true, processingPayment: true });
+                setTimeout(() => {
+                    this.setState({ loading: false, processingPayment: false });
+                    this.createAccount();
+                }, 3000);
+            }
         }
     }
 
@@ -180,7 +199,7 @@ class Signup extends Component {
     render() {
         return (
             <Fragment>
-                <div className="col-md-8 offset-md-2">
+                <div className="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                     <h2 className="mt-2 mb-2">Flexinets Global Wi-Fi</h2>
 
                     {!this.state.processingPayment &&

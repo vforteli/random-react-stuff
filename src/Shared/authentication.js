@@ -6,9 +6,11 @@ import qs from 'qs';
 //export const LOGIN_URL = 'https://authentication.flexinets.se/token';
 //export const LOGOUT_URL = 'https://authentication.flexinets.se/logout';
 //const ACCOUNT_URL = 'https://authentication.flexinets.se/api/account/';
+//export const AUTH_BASE_URL = 'https://authentication.flexinets.se';
 export const LOGIN_URL = 'http://localhost:65138/token';
 export const LOGOUT_URL = 'http://localhost:65138/logout';
 export const ACCOUNT_URL = 'http://localhost:65138/api/account/';
+export const AUTH_BASE_URL = 'http://localhost:65138';
 const TOKEN_KEY = 'react_token';
 
 
@@ -118,6 +120,16 @@ export async function getRefreshedAccessToken() {
         return getToken().access_token;    // test stuff
     }
     return null;
+}
+
+
+/**
+ * Check if an email address is available for an admin account
+ * @param {any} email 
+ */
+export async function checkEmailAvailability(email) {
+    var response = await axios.get(`${AUTH_BASE_URL}/api/checkemailavailability?email=${email}`);
+    return response.data.available;
 }
 
 

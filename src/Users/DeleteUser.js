@@ -19,11 +19,11 @@ class DeleteUser extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        this.setState({ loading: true });
-        toast.info("User deleted");
+        this.setState({ loading: true });        
         this.setState({ result: this.state.userId });
         this.dismiss();
         axios.delete('/api/users/' + this.state.userId).then(function (response) {
+            toast.info("User deleted");
             this.setState({ loading: false });
             this.dismiss(this.state.userId);
         });

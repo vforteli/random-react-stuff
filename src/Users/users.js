@@ -97,9 +97,9 @@ class Users extends Component {
                                     {this.state.users.map((user) =>
                                         <tr key={user.UserID}>
                                             <td className="wrapcolumn"><input type="checkbox" ng-model="user.selected" /></td>
-                                            <td ui-sref="users.detail.edit({ userId: user.UserID })" className="pointer">
+                                            <td className="pointer">
                                                 <div className="row">
-                                                    <div className="col-md-5"><a href="">{user.Fullname}</a></div>
+                                                    <div className="col-md-5"><Link to={'/users/edit/' + user.UserID}>{user.Fullname}</Link></div>
                                                     <div className="col-md-5">{user.EmailAddress}</div>
                                                     <div className="col-md-2">{user.Enabled ? <span className="label label-success">Active</span> : <span className="label label-danger">Suspended</span>}</div>
                                                 </div>

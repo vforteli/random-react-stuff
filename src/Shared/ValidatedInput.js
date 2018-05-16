@@ -7,20 +7,28 @@ class ValidatedInput extends Component {
         this.state = {
             touched: false,
             hasError: false,
-            valid: null
         };
     }
 
 
+    setTouched = (e) => {
+        this.setValidity(e);
+    }
+
+
     handleChange = (e) => {
+        this.setValidity(e);
+        this.props.onChange(e); // call onchange from parent
+    }
+
+
+    setValidity = (e) => {
         //console.debug(e.target.validity.valueMissing);      
         const valid = e.target.checkValidity();
         this.setState({
             touched: true,
-            valid: valid,
             hasError: !valid    // duh...
         });
-        this.props.onChange(e); // call onchange from parent
     }
 }
 
