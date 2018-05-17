@@ -17,8 +17,8 @@ class Signup extends Component {
     constructor(props) {
         super(props);
 
-        this.validateEmail = debounce(this.validateEmail, 700);
-        this.checkVatNumber = debounce(this.checkVatNumber, 700);
+        this.validateEmail = debounce(this.validateEmail, 700, { trailing: true, leading: true });
+        this.checkVatNumber = debounce(this.checkVatNumber, 700, { trailing: true, leading: true });
 
         let product = 'ipass_monthly_eur_25';
         let currency = "eur";
@@ -96,19 +96,20 @@ class Signup extends Component {
 
 
     handleEmailChange = (event) => {
-        event.persist();
         this.setState({ email: event.target.value });
+
+        event.persist();
         this.validateEmail(event);
     }
 
     validateEmail = async (event) => {
         var result = await checkEmailAvailability(event.target.value);
         if (result) {
-            console.debug('clear error');
+            console.debug('clear custom error');
             event.target.setCustomValidity('');
         }
         else {
-            console.debug('set error');
+            console.debug('set custom error');
             event.target.setCustomValidity('Email already registered');
         }
     }
@@ -163,6 +164,7 @@ class Signup extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         const formValid = event.target.checkValidity();
+        this.setState({ isTouched: true });
         console.debug(formValid);
         if (formValid) {
             if (this.state.paymentMethod !== 'CreditCard') {
@@ -203,13 +205,13 @@ class Signup extends Component {
                     <h2 className="mt-2 mb-2">Flexinets Global Wi-Fi</h2>
 
                     {!this.state.processingPayment &&
-                        <form onSubmit={this.handleSubmit} noValidate>
+                        <form onSubmit={this.handleSubmit} className={this.state.isTouched ? 'was-validated' : ''} noValidate>
                             <div className="card mb-3">
                                 <div className="card-body m-2">
                                     <h3 className="text-center">Choose subscription type</h3>
                                     <div className="row pointer">
                                         <div className={this.state.signupType === 'SingleUser' ? 'col btn-policy btn-policy-active' : 'col btn-policy'} onClick={(e) => this.setState({ signupType: 'SingleUser', licenseCount: 1 })} >
-                                            <input type="radio" className='sr-only' name="signupType" value="SingleUser" onChange={this.handleChange} required />
+                                            <input type="radio" className='sr-only' checked={this.state.signupType === 'SingleUser'} name="signupType" value="SingleUser" onChange={this.handleChange} required />
                                             <h4>Single user</h4>
                                             <h5>{this.getSelectedProduct().price} {this.state.currency.toUpperCase()} / Month</h5>
                                             <small>Excluding VAT</small>
@@ -219,7 +221,7 @@ class Signup extends Component {
                                             </p>
                                         </div>
                                         <div className={this.state.signupType === 'Admin' ? 'col btn-policy btn-policy-active' : 'col btn-policy'} onClick={(e) => this.setState({ signupType: 'Admin' })} >
-                                            <input type="radio" className='sr-only' name="signupType" value="Admin" onChange={this.handleChange} required />
+                                            <input type="radio" className='sr-only' checked={this.state.signupType === 'Admin'} name="signupType" value="Admin" onChange={this.handleChange} required />
                                             <h4>Multiple users</h4>
                                             <h5>{this.getSelectedProduct().price} {this.state.currency.toUpperCase()} / User / Month</h5>
                                             <small>Excluding VAT</small>

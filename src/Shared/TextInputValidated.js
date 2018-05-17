@@ -9,6 +9,8 @@ class TextInputValidated extends ValidatedInput {
                 <input onBlur={this.setTouched} className={this.state.hasError ? 'form-control is-invalid' : 'form-control'} {...this.props} onChange={this.handleChange} />
                 <div className="invalid-feedback">
                     This field is required
+                    {this.state.validity.valueMissing && 'This field is required'}
+                    {this.state.validity.customError && 'Custom error'}
                 </div>
             </div>
         );
