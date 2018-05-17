@@ -27,6 +27,7 @@ class ValidatedInput extends Component {
         //console.debug(e.target.validity.valueMissing);
         //console.debug(e.target.validity);
         //console.debug(e.target.validity.customError)
+        console.debug(this.props.customValidator());
         const valid = e.target.checkValidity();
         this.setState({
             touched: true,

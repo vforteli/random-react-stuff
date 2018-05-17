@@ -45,3 +45,8 @@ a {
 .navbar-toggler {
     border: none !important;
 }
+
+
+.was-validated .form-control:invalid {
+    border-color: none !important;
+}

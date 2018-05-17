@@ -268,7 +268,7 @@ class Signup extends Component {
 
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <TextInputValidated type='email' name='email' onChange={this.handleEmailChange} value={this.state.email} label='Email' required placeholder='email@example.com' />
+                                            <TextInputValidated type='email' name='email' onChange={this.handleEmailChange} customValidator={() => { return false }} value={this.state.email} label='Email' required placeholder='email@example.com' />
                                         </div>
                                         <div className="col-md-6">
                                             <TextInputValidated type="password" label='Password' name='password' placeholder='Create a password' required value={this.state.password} onChange={this.handleChange} />

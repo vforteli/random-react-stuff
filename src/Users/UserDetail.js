@@ -49,10 +49,14 @@ class UserDetail extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        this.setState({ loading: true });
-        this.setState({ result: this.state.userId });
-        this.setState({ loading: false });
-        this.dismiss();
+        if (event.target.checkValidity()) {
+            this.setState({ loading: true });
+            this.setState({ result: this.state.userId });
+            this.setState({ loading: false });
+            this.dismiss();
+        }
+
+        this.setState({ isDirty: true });
     }
 
     dismiss = (event) => { this.setState({ modal: false }); }
@@ -61,8 +65,8 @@ class UserDetail extends Component {
 
     render() {
         return (
-            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss} className={this.props.className}>
-                <form onSubmit={this.handleSubmit} noValidate>
+            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
+                <form onSubmit={this.handleSubmit} noValidate className={this.state.isDirty && 'was-validated'}>
                     <div className="modal-content">
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
