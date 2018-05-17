@@ -23,11 +23,22 @@ class ValidatedInput extends Component {
     }
 
 
-    setValidity = (e) => {
+    setValidity = async (e) => {
         //console.debug(e.target.validity.valueMissing);
         //console.debug(e.target.validity);
         //console.debug(e.target.validity.customError)
-        console.debug(this.props.customValidator());
+        if (this.props.customValidator) {
+            e.persist();
+            const customResult = await this.props.customValidator(e);
+            console.debug(`custom validator result ${customResult}`);
+            if (!customResult) {
+                e.target.setCustomValidity('Email already registered'); // refactor message
+            }
+            else {
+                e.target.setCustomValidity('');
+            }
+        }
+
         const valid = e.target.checkValidity();
         this.setState({
             touched: true,
