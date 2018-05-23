@@ -84,7 +84,7 @@ class UserDetail extends Component {
                             }
                         </ModalBody>
                         <ModalFooter>
-                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit" value='Save user' /> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
+                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Save user</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
                 </form>

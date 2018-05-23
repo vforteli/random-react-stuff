@@ -64,7 +64,7 @@ class ChangePassword extends Component {
                             <TextInputValidated type="password" name="passwordconfirm" label="Confirm password" required value={this.state.passwordconfirm} onChange={this.handleChange} placeholder="Confirm password" />
                         </ModalBody>
                         <ModalFooter>
-                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit" value='Change password' /> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
+                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Change password</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
                 </form>

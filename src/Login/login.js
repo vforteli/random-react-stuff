@@ -66,7 +66,7 @@ class Login extends Component {
                             <label className="sr-only" htmlFor="Password">Password</label>
                             <input type="password" value={this.state.password} onChange={this.handleChange} id="Password" name="password" placeholder="Password" required className="form-control" />
 
-                            <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-primary mt-4 mb-4" value='Log in' />
+                            <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-primary mt-4 mb-4">Log in</ButtonLoading>
 
                             <div className="text-center"><h5><Link to='/login/reset'>Forgot password?</Link></h5></div>
                         </form>

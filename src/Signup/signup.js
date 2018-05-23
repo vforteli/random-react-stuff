@@ -360,7 +360,7 @@ class Signup extends Component {
                                             token={this.onToken}
                                             stripeKey={this.state.stripeKey}
                                         >
-                                            <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-lg btn-primary" value='Pay and Create Account' />
+                                            <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-lg btn-primary">Pay and Create Account</ButtonLoading>
                                         </StripeCheckout>
                                     }
                                 </div>

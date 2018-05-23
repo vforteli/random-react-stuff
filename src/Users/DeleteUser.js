@@ -19,7 +19,7 @@ class DeleteUser extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        this.setState({ loading: true });        
+        this.setState({ loading: true });
         this.setState({ result: this.state.userId });
         this.dismiss();
         axios.delete('/api/users/' + this.state.userId).then(function (response) {
@@ -50,7 +50,7 @@ class DeleteUser extends Component {
                             <strong>{this.props.fullname}</strong>
                         </ModalBody>
                         <ModalFooter>
-                            <ButtonLoading className="btn btn-danger" loading={this.state.loading} type="submit" value='Delete' /> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
+                            <ButtonLoading className="btn btn-danger" loading={this.state.loading} type="submit">Delete</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
                 </form>
