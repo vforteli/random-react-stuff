@@ -296,7 +296,7 @@ class Signup extends Component {
                                     {this.state.country === 'DK' &&
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <TextInputValidated type="text" label='EAN Number' name='ean' placeholder='EAN Number' />
+                                                <TextInputValidated type="text" label='EAN Number' name='ean' onChange={this.handleChange} value={this.state.ean} placeholder='EAN Number' />
                                             </div>
                                         </div>
                                     }
