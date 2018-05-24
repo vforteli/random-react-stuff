@@ -5,6 +5,7 @@ import TextInputValidated from '../Shared/TextInputValidated';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ACCOUNT_URL } from '../Shared/authentication';
+import ValidatedForm from '../Shared/ValidatedForm';
 
 
 class ChangePassword extends Component {
@@ -26,7 +27,6 @@ class ChangePassword extends Component {
     }
 
     handleSubmit = async (event) => {
-        event.preventDefault();
         this.setState({ loading: true });
 
         const response = await axios.post(ACCOUNT_URL + 'changepassword/', {
@@ -55,7 +55,7 @@ class ChangePassword extends Component {
     render() {
         return (
             <Modal onClosed={this.onClosed} isOpen={this.props.isOpen} toggle={this.dismiss} >
-                <form onSubmit={this.handleSubmit} noValidate>
+                <ValidatedForm onSubmit={this.handleSubmit}>
                     <div className="modal-content">
                         <ModalHeader>Change password</ModalHeader>
                         <ModalBody>
@@ -67,7 +67,7 @@ class ChangePassword extends Component {
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Change password</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
-                </form>
+                </ValidatedForm>
             </Modal >
         );
     }

@@ -11,6 +11,7 @@ import { OrderSummary } from './OrderSummary';
 import TextInputValidated from '../Shared/TextInputValidated';
 import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
 import { checkEmailAvailability } from '../Shared/authentication';
+import ValidatedForm from '../Shared/ValidatedForm';
 
 
 class Signup extends Component {
@@ -39,7 +40,8 @@ class Signup extends Component {
             product: product,
             vatnumber: '',
             licenseCount: 1,
-            paymentMethod: 'CreditCard',
+            //paymentMethod: 'CreditCard',
+            paymentMethod: 'Invoice',
             products: [
                 { id: 'ipass_monthly_dkk', title: 'iPass Monthly Susbcription', price: 186.00, interval: 'Month' },
                 { id: 'ipass_monthly_eur_25', title: 'iPass Monthly Susbcription', price: 25.00, interval: 'Month' }
@@ -147,18 +149,12 @@ class Signup extends Component {
     }
 
     handleSubmit = (event) => {
-        event.preventDefault();
-        const formValid = event.target.checkValidity();
-        this.setState({ isTouched: true });
-        console.debug(formValid);
-        if (formValid) {
-            if (this.state.paymentMethod !== 'CreditCard') {
-                this.setState({ loading: true, processingPayment: true });
-                setTimeout(() => {
-                    this.setState({ loading: false, processingPayment: false });
-                    this.createAccount();
-                }, 3000);
-            }
+        if (this.state.paymentMethod !== 'CreditCard') {
+            this.setState({ loading: true, processingPayment: true });
+            setTimeout(() => {
+                this.setState({ loading: false, processingPayment: false });
+                this.createAccount();
+            }, 3000);
         }
     }
 
@@ -190,7 +186,7 @@ class Signup extends Component {
                     <h2 className="mt-2 mb-2">Flexinets Global Wi-Fi</h2>
 
                     {!this.state.processingPayment &&
-                        <form onSubmit={this.handleSubmit} className={this.state.isTouched ? 'was-validated' : ''} noValidate>
+                        <ValidatedForm onSubmit={this.handleSubmit}>
                             <div className="card mb-3">
                                 <div className="card-body m-2">
                                     <h3 className="text-center">Choose subscription type</h3>
@@ -365,7 +361,7 @@ class Signup extends Component {
                                     }
                                 </div>
                             </div>
-                        </form>
+                        </ValidatedForm>
                     }
 
                     {this.state.processingPayment && <ProcessingPayment />}

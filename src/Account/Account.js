@@ -5,6 +5,7 @@ import TextInputValidated from '../Shared/TextInputValidated';
 import axios from 'axios';
 import { ACCOUNT_URL } from '../Shared/authentication';
 import { toast } from 'react-toastify';
+import ValidatedForm from '../Shared/ValidatedForm';
 
 
 class Account extends Component {
@@ -39,10 +40,7 @@ class Account extends Component {
 
 
     handleSubmit = async (event) => {
-        event.preventDefault();
-        console.debug("foo");
         this.setState({ loading: true });
-
         const response = await axios.post(ACCOUNT_URL, {
             emailaddress: this.state.email,
             phonenumber: this.state.phonenumber,
@@ -77,7 +75,7 @@ class Account extends Component {
     render() {
         return (
             <Modal onClosed={this.onClosed} isOpen={this.state.isOpen} toggle={this.dismiss}>
-                <form onSubmit={this.handleSubmit} noValidate>
+                <ValidatedForm onSubmit={this.handleSubmit}>
                     <div className="modal-content">
                         <ModalHeader>My account</ModalHeader>
                         <ModalBody>
@@ -89,7 +87,7 @@ class Account extends Component {
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Save changes</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
-                </form>
+                </ValidatedForm>
             </Modal >
         );
     }

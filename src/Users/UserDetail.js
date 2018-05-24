@@ -3,6 +3,7 @@ import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import TextInputValidated from '../Shared/TextInputValidated';
 import axios from 'axios';
+import ValidatedForm from '../Shared/ValidatedForm';
 
 
 class UserDetail extends Component {
@@ -47,16 +48,12 @@ class UserDetail extends Component {
         this.setState({ [name]: value });
     }
 
-    handleSubmit = async (event) => {
-        event.preventDefault();
-        if (event.target.checkValidity()) {
-            this.setState({ loading: true });
-            this.setState({ result: this.state.userId });
-            this.setState({ loading: false });
-            this.dismiss();
-        }
 
-        this.setState({ isDirty: true });
+    handleSubmit = async (event) => {
+        this.setState({ loading: true });
+        this.setState({ result: this.state.userId });
+        this.setState({ loading: false });
+        this.dismiss();
     }
 
     dismiss = (event) => { this.setState({ modal: false }); }
@@ -66,7 +63,7 @@ class UserDetail extends Component {
     render() {
         return (
             <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
-                <form onSubmit={this.handleSubmit} noValidate className={this.state.isDirty && 'was-validated'}>
+                <ValidatedForm onSubmit={this.handleSubmit}>
                     <div className="modal-content">
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
@@ -87,7 +84,7 @@ class UserDetail extends Component {
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Save user</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
-                </form>
+                </ValidatedForm>
             </Modal >
         );
     }
