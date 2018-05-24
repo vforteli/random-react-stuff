@@ -15,10 +15,15 @@ class ValidatedForm extends React.Component {
         const valid = event.target.checkValidity();
         console.debug(`form isValid: ${valid}`);
         if (valid) {
-            console.debug('form is valid, call caller onSubmit');
+            console.debug('form is valid, call parent onSubmit');
             this.props.onSubmit(event);
         }
+        else {
+            console.debug('do something with invalid form?');
+        }
     }
+
+    isValid = () => { return false; }   // todo implement
 
     render() {
         const { onSubmit, ...rest } = this.props;

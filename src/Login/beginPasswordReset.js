@@ -2,6 +2,8 @@
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { beginReset } from '../Shared/authentication';
+import ValidatedForm from '../Shared/ValidatedForm';
+import TextInputValidated from '../Shared/TextInputValidated';
 
 
 class BeginPasswordReset extends Component {
@@ -20,8 +22,7 @@ class BeginPasswordReset extends Component {
         this.setState({ [name]: value });
     }
 
-    handleSubmit = async (event) => {
-        event.preventDefault();
+    handleSubmit = async (event) => {        
         this.setState({ loading: true });
         await beginReset(this.state.emailaddress);
         this.setState({ loading: false });
@@ -38,24 +39,21 @@ class BeginPasswordReset extends Component {
     render() {
         return (
             <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss} className={this.props.className}>
-                <form onSubmit={this.handleSubmit}>
+                <ValidatedForm onSubmit={this.handleSubmit}>
                     <div className="modal-content">
                         <ModalHeader>Reset password</ModalHeader>
                         <ModalBody>
                             <p>
                                 Enter your email address below and click Reset password.<br />
                                 You will shortly receive an email containing a link to reset your password.
-                                </p>
-                            <div className="form-group required">
-                                <label>Email address</label>
-                                <input className="form-control" type="email" required name="emailaddress" value={this.state.emailaddress} onChange={this.handleChange} placeholder="email@example.com" />
-                            </div>
+                            </p>
+                            <TextInputValidated type="email" label='Email' required name="emailaddress" value={this.state.emailaddress} onChange={this.handleChange} placeholder="email@example.com" />
                         </ModalBody>
                         <ModalFooter>
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Send reset email</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
-                </form>
+                </ValidatedForm>
             </Modal>
         );
     }

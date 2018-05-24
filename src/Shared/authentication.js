@@ -128,7 +128,7 @@ export async function getRefreshedAccessToken() {
  * @param {any} email 
  */
 export async function checkEmailAvailability(email) {
-    var response = await axios.get(`${AUTH_BASE_URL}/api/checkemailavailability?email=${email}`);
+    const response = await axios.get(`${AUTH_BASE_URL}/api/checkemailavailability?email=${email}`);
     return response.data.available;
 }
 
