@@ -68,20 +68,27 @@ class UserDetail extends Component {
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
                             <TextInputValidated type="text" name="fullname" label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
-                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} onChange={this.handleChange} placeholder="Username" />
-                            <small className="form-text text-muted">Set to desired username or use a randomly generated. <br />The username must be unique and cannot be changed later</small>
-                            <TextInputValidated type="email" name="email" label="Email" required value={this.state.email} onChange={this.handleChange} placeholder="email@example.com" />
-                            {!this.state.userId &&
-                                <div className="bs-callout bs-callout-info">
-                                    <h4>Adding a new user</h4>
-                                    After adding a user, an email invite for downloading the App will be sent to the user.<br />
-                                    The link must be clicked on the intended device.<br />
-                                    If needed the invite can be resent later.
-                                </div>
-                            }
+                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} onChange={this.handleChange} placeholder="Username">
+                                {!this.state.userId &&
+                                    <small className="form-text text-muted">
+                                        Set to desired username or use a randomly generated. <br />
+                                        The username must be unique and cannot be changed later
+                                    </small>
+                                }
+                            </TextInputValidated>
+                            <TextInputValidated type="email" name="email" label="Email" required value={this.state.email} onChange={this.handleChange} placeholder="email@example.com">
+                                {!this.state.userId &&
+                                    <div className="bs-callout bs-callout-info">
+                                        <h4>Adding a new user</h4>
+                                        After adding a user, an email invite for downloading the App will be sent to the user.<br />
+                                        The link must be clicked on the intended device.<br />
+                                        If needed the invite can be resent later.
+                                    </div>
+                                }
+                            </TextInputValidated>
                         </ModalBody>
                         <ModalFooter>
-                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Save user</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
+                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">{this.state.userId ? 'Save user' : 'Add User & Send invite'}</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
                 </ValidatedForm>

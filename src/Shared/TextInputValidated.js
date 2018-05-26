@@ -3,7 +3,7 @@ import ValidatedInput from './ValidatedInput';
 
 class TextInputValidated extends ValidatedInput {
     render() {
-        const { customValidator, onChange, ...rest } = this.props;  // todo do this in ValidatedInput?
+        const { children, customValidator, onChange, ...rest } = this.props;  // todo do this in ValidatedInput?
         return (
             <div className={this.props.required ? 'form-group required' : 'form-group'}>
                 <label htmlFor={this.props.name}>{this.props.label} {!this.props.required && <small>(Optional)</small>}</label>
@@ -12,6 +12,7 @@ class TextInputValidated extends ValidatedInput {
                     {this.state.validity.valueMissing && 'This field is required'}
                     {this.state.validity.customError && 'Custom error'}
                 </div>
+                {this.props.children}
             </div>
         );
     }
