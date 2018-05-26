@@ -9,7 +9,7 @@ import Menu from './menu';
 import Login from './Login/login';
 import Home from './Home/home';
 import Subscription from './Subscription/subscription';
-import Users from './Users/users';
+import Users from './Users/Users';
 import Signup from './Signup/signup';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

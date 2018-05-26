@@ -10,7 +10,7 @@ class Menu extends Component {
         super(props);
 
         this.state = {
-            isOpen: false,
+            navbarOpen: false,
             accountModalOpen: false,
             passwordModalOpen: false
         };
@@ -31,8 +31,8 @@ class Menu extends Component {
                     <NavbarBrand tag={Link} to={'/'}><img src="/Content/img/flexible-networks-nordic_logo-genomskinlig-300x77.png" alt="flexinets logo" /></NavbarBrand>
                     {isLoggedIn() &&
                         <Fragment>
-                            <NavbarToggler onClick={() => this.setState({ isOpen: !this.state.isOpen })} />
-                            <Collapse isOpen={this.state.isOpen} navbar>
+                            <NavbarToggler onClick={() => this.setState({ navbarOpen: !this.state.navbarOpen })} />
+                            <Collapse isOpen={this.state.navbarOpen} navbar>
                                 <Nav className="mr-auto" navbar>
                                     <NavItem><NavLink to='/users' activeClassName='menuactive' className="nav-link">Users</NavLink></NavItem>
                                     <NavItem><NavLink to='/subscription' activeClassName='menuactive' className="nav-link">Subscription</NavLink></NavItem>
@@ -53,7 +53,7 @@ class Menu extends Component {
                     }
                 </Navbar>
                 {this.state.accountModalOpen && <Account onClosed={() => this.setState({ accountModalOpen: false })} />}
-                <ChangePassword isOpen={this.state.passwordModalOpen} onDismiss={() => this.setState({ passwordModalOpen: false })} />
+                {this.state.passwordModalOpen && <ChangePassword onClosed={() => this.setState({ passwordModalOpen: false })} />}
             </Fragment>
         );
     }

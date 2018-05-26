@@ -45,7 +45,7 @@ class Account extends ModalForm {
         const response = await axios.post(ACCOUNT_URL, {
             emailaddress: this.state.email,
             phonenumber: this.state.phonenumber,
-            fullname: this.state.phonenumber
+            fullname: this.state.fullname
         });
 
         if (response.status === 200) {
