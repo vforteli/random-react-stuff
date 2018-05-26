@@ -40,8 +40,8 @@ class Signup extends Component {
             product: product,
             vatnumber: '',
             licenseCount: 1,
-            //paymentMethod: 'CreditCard',
-            paymentMethod: 'Invoice',
+            stripeCheckoutDisabled: true,
+            paymentMethod: 'CreditCard',
             products: [
                 { id: 'ipass_monthly_dkk', title: 'iPass Monthly Susbcription', price: 186.00, interval: 'Month' },
                 { id: 'ipass_monthly_eur_25', title: 'iPass Monthly Susbcription', price: 25.00, interval: 'Month' }
@@ -124,6 +124,7 @@ class Signup extends Component {
         this.checkVatNumber(event);
     }
 
+
     checkVatNumber = async (event) => {
         this.setState({
             checkingVatNumber: true,
@@ -148,7 +149,13 @@ class Signup extends Component {
         this.setState({ checkingVatNumber: false });
     }
 
+
     handleSubmit = (event) => {
+        console.debug('hur');
+        if (this.state.paymentMethod === 'CreditCard') {
+            this.setState({ stripeCheckoutDisabled: false });
+        }
+
         if (this.state.paymentMethod !== 'CreditCard') {
             this.setState({ loading: true, processingPayment: true });
             setTimeout(() => {
@@ -345,7 +352,7 @@ class Signup extends Component {
 
                                     {this.state.stripeKey &&
                                         <StripeCheckout
-                                            disabled={this.state.paymentMethod === 'Invoice'}
+                                            disabled={this.state.stripeCheckoutDisabled}
                                             name='Flexible Networks Nordic AB'
                                             description={this.getSelectedProduct().title}
                                             currency={this.state.currency.toUpperCase()}

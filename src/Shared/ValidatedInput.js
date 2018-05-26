@@ -18,8 +18,8 @@ class ValidatedInput extends Component {
 
 
     handleChange = (e) => {
-        this.setValidity(e);
         this.props.onChange(e);
+        this.setValidity(e);
     }
 
 
