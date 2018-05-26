@@ -1,12 +1,13 @@
-﻿import React, { Component } from 'react';
-import { ButtonLoading } from '../Shared/components';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import TextInputValidated from '../Shared/TextInputValidated';
+﻿import React from 'react';
 import axios from 'axios';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import TextInputValidated from '../Shared/TextInputValidated';
 import ValidatedForm from '../Shared/ValidatedForm';
+import { ButtonLoading } from '../Shared/components';
+import ModalForm from '../Shared/ModalForm';
 
 
-class UserDetail extends Component {
+class UserDetail extends ModalForm {
     constructor(props) {
         super(props);
 
@@ -55,10 +56,6 @@ class UserDetail extends Component {
         this.setState({ loading: false });
         this.dismiss();
     }
-
-    dismiss = (event) => { this.setState({ modal: false }); }
-
-    onClosed = (event) => { this.props.onClosed(this.state.result); }
 
     render() {
         return (

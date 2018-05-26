@@ -1,11 +1,12 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ModalForm from '../Shared/ModalForm';
 
 
-class DeleteUser extends Component {
+class DeleteUser extends ModalForm {
     constructor(props) {
         super(props);
 
@@ -20,29 +21,22 @@ class DeleteUser extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
         this.setState({ loading: true });
-        this.setState({ result: this.state.userId });
-        this.dismiss();
-        axios.delete('/api/users/' + this.state.userId).then(function (response) {
+
+        const response = await axios.delete(`/api/users/${this.state.userId}`);
+        this.setState({ loading: false });
+        if (response.status === 200) {
             toast.info("User deleted");
-            this.setState({ loading: false });
             this.dismiss(this.state.userId);
-        });
-    }
-
-
-    dismiss = (event) => { this.setState({ modal: false }); }
-
-
-    onClosed = (event) => {
-        if (this.props.onClosed) {
-            this.props.onClosed(this.state.result);
+        }
+        else {
+            toast.error(`Something went wrong: ${response.statusText}`);
         }
     }
 
 
     render() {
         return (
-            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss} className={this.props.className}>
+            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
                 <form onSubmit={this.handleSubmit} noValidate>
                     <div className="modal-content">
                         <ModalBody>

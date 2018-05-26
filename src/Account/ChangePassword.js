@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import TextInputValidated from '../Shared/TextInputValidated';
@@ -6,12 +6,14 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ACCOUNT_URL } from '../Shared/authentication';
 import ValidatedForm from '../Shared/ValidatedForm';
+import ModalForm from '../Shared/ModalForm';
 
 
-class ChangePassword extends Component {
+class ChangePassword extends ModalForm {
     constructor(props) {
         super(props);
         this.state = {
+            modal: true,
             oldpassword: '',
             password: '',
             passwordconfirm: ''
@@ -35,26 +37,21 @@ class ChangePassword extends Component {
             passwordconfirm: this.state.passwordconfirm
         });
 
+        this.setState({ loading: false });
         if (response.status === 200) {
             toast.success('Your password has been changed');
-            this.setState({ result: this.state.userId, loading: false });
             this.dismiss();
         }
         else {
+            toast.error(`Something went wrong: ${response.statusText}`);
             console.debug(response);
         }
     }
 
 
-    dismiss = (event) => {
-        if (this.props.onDismiss) {
-            this.props.onDismiss(this.state.result);
-        }
-    }
-
     render() {
         return (
-            <Modal onClosed={this.onClosed} isOpen={this.props.isOpen} toggle={this.dismiss} >
+            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
                 <ValidatedForm onSubmit={this.handleSubmit}>
                     <div className="modal-content">
                         <ModalHeader>Change password</ModalHeader>

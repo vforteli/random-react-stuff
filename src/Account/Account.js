@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import TextInputValidated from '../Shared/TextInputValidated';
@@ -6,13 +6,14 @@ import axios from 'axios';
 import { ACCOUNT_URL } from '../Shared/authentication';
 import { toast } from 'react-toastify';
 import ValidatedForm from '../Shared/ValidatedForm';
+import ModalForm from '../Shared/ModalForm';
 
 
-class Account extends Component {
+class Account extends ModalForm {
     constructor(props) {
         super(props);
         this.state = {
-            isOpen: true,
+            modal: true,
             email: '',
             phonenumber: '',
             fullname: ''
@@ -63,18 +64,9 @@ class Account extends Component {
     }
 
 
-    dismiss = (event) => { this.setState({ isOpen: false }); }
-
-
-    onClosed = (event) => {
-        if (this.props.onClosed) {
-            this.props.onClosed('result goes here');
-        }
-    }
-
     render() {
         return (
-            <Modal onClosed={this.onClosed} isOpen={this.state.isOpen} toggle={this.dismiss}>
+            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
                 <ValidatedForm onSubmit={this.handleSubmit}>
                     <div className="modal-content">
                         <ModalHeader>My account</ModalHeader>
