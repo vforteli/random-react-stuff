@@ -12,11 +12,6 @@ class ValidatedInput extends Component {
     }
 
 
-    setTouched = (e) => {
-        this.setValidity(e);
-    }
-
-
     handleChange = (e) => {
         this.props.onChange(e);
         this.setValidity(e);
