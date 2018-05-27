@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import StripeCheckout from 'react-stripe-checkout';
-import { debounce } from 'lodash';
+import debounce from 'debounce-promise';
 
 import { ButtonLoading } from '../Shared/components';
 import TermsAndConditions from './TermsAndConditions';
@@ -17,9 +17,6 @@ import ValidatedForm from '../Shared/ValidatedForm';
 class Signup extends Component {
     constructor(props) {
         super(props);
-
-        //this.validateEmail = debounce(this.validateEmail, 700, { trailing: true, leading: true });
-        //this.checkVatNumber = debounce(this.checkVatNumber, 700, { trailing: true, leading: true });
 
         let product = 'ipass_monthly_eur_25';
         let currency = "eur";
@@ -96,12 +93,9 @@ class Signup extends Component {
         this.setState({ [event.target.name]: value });
     }
 
-    validateEmail = debounce(checkEmailAvailability, 700);
-    //validateEmail = debounce(async (value) => {
-    //    console.log('debounced')
-    //    return await checkEmailAvailability(value);
-    //}, 1000)
-    //validateEmail = checkEmailAvailability;
+
+    validateEmail = debounce(checkEmailAvailability, 700, { leading: true });
+
 
     handleCountryChanged = (country) => {
         this.setState({
@@ -122,11 +116,11 @@ class Signup extends Component {
     handleVatNumberChange = (event) => {
         event.persist();
         this.setState({ vatnumber: event.target.value });
-        this.checkVatNumber(event);
+        this.checkVatNumber(event.target.value);
     }
 
 
-    checkVatNumber = async (event) => {
+    checkVatNumber = debounce(async (value) => {
         this.setState({
             checkingVatNumber: true,
             vatExempt: false,
@@ -134,7 +128,7 @@ class Signup extends Component {
         });
 
         try {
-            const response = await axios.get('https://api.flexinets.se/api/validatevatnumber?vatnumber=' + event.target.value);
+            const response = await axios.get(`https://api.flexinets.se/api/validatevatnumber?vatnumber=${value}`);
             if (response.data.result === 'EuVatNumberValid') {
                 this.setState({
                     viesName: response.data.name,
@@ -148,7 +142,7 @@ class Signup extends Component {
             console.error(error);
         }
         this.setState({ checkingVatNumber: false });
-    }
+    }, 700, { leading: true });
 
 
     handleSubmit = (event) => {

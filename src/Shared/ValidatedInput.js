@@ -25,7 +25,6 @@ class ValidatedInput extends Component {
         const target = e.target;
         if (this.props.customValidator) {
             const customResult = await this.props.customValidator(target.value);
-            console.debug(`custom validator result ${customResult}`);
             if (!customResult) {
                 target.setCustomValidity('Email already registered'); // refactor message
             }
