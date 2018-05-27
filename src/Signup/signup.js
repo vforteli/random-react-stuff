@@ -18,8 +18,8 @@ class Signup extends Component {
     constructor(props) {
         super(props);
 
-        this.validateEmail = debounce(this.validateEmail, 700, { trailing: true, leading: true });
-        this.checkVatNumber = debounce(this.checkVatNumber, 700, { trailing: true, leading: true });
+        //this.validateEmail = debounce(this.validateEmail, 700, { trailing: true, leading: true });
+        //this.checkVatNumber = debounce(this.checkVatNumber, 700, { trailing: true, leading: true });
 
         let product = 'ipass_monthly_eur_25';
         let currency = "eur";
@@ -96,11 +96,12 @@ class Signup extends Component {
         this.setState({ [event.target.name]: value });
     }
 
-
-    validateEmail = async (event) => {
-        return await checkEmailAvailability(event.target.value);
-    }
-
+    validateEmail = debounce(checkEmailAvailability, 700);
+    //validateEmail = debounce(async (value) => {
+    //    console.log('debounced')
+    //    return await checkEmailAvailability(value);
+    //}, 1000)
+    //validateEmail = checkEmailAvailability;
 
     handleCountryChanged = (country) => {
         this.setState({

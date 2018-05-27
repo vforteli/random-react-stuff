@@ -22,23 +22,23 @@ class ValidatedInput extends Component {
         //console.debug(e.target.validity.valueMissing);
         //console.debug(e.target.validity);
         //console.debug(e.target.validity.customError)
+        const target = e.target;
         if (this.props.customValidator) {
-            e.persist();
-            const customResult = await this.props.customValidator(e);
+            const customResult = await this.props.customValidator(target.value);
             console.debug(`custom validator result ${customResult}`);
             if (!customResult) {
-                e.target.setCustomValidity('Email already registered'); // refactor message
+                target.setCustomValidity('Email already registered'); // refactor message
             }
             else {
-                e.target.setCustomValidity('');
+                target.setCustomValidity('');
             }
         }
 
-        const valid = e.target.checkValidity();
+        const valid = target.checkValidity();
         this.setState({
             touched: true,
             hasError: !valid,
-            validity: e.target.validity
+            validity: target.validity
         });
     }
 }
