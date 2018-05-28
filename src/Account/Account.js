@@ -21,13 +21,12 @@ class Account extends ModalForm {
     }
 
 
-    componentWillMount() {
-        axios.get(ACCOUNT_URL).then(response => {
-            this.setState({
-                email: response.data.EmailAddress,
-                phonenumber: response.data.Phonenumber,
-                fullname: response.data.Fullname
-            });
+    async componentWillMount() {
+        const response = await axios.get(ACCOUNT_URL);
+        this.setState({
+            email: response.data.EmailAddress,
+            phonenumber: response.data.Phonenumber,
+            fullname: response.data.Fullname
         });
     }
 
@@ -35,8 +34,7 @@ class Account extends ModalForm {
     handleChange = (event) => {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({ [name]: value });
+        this.setState({ [target.name]: value });
     }
 
 
@@ -47,16 +45,10 @@ class Account extends ModalForm {
             phonenumber: this.state.phonenumber,
             fullname: this.state.fullname
         });
-
+        this.setState({ loading: false });
         if (response.status === 200) {
             toast.success('Your account was saved');
-
-            this.setState({
-                result: this.state.userId,
-                loading: false
-            });
-            this.dismiss();
-
+            this.dismiss(this.state.userId);
         }
         else {
             console.debug(response);
