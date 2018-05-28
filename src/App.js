@@ -8,6 +8,7 @@ import Footer from './Shared/Footer';
 import Menu from './menu';
 import Login from './Login/login';
 import Home from './Home/home';
+import Upgrade from './Upgrade/Upgrade';
 import Subscription from './Subscription/subscription';
 import Users from './Users/Users';
 import Signup from './Signup/signup';
@@ -33,6 +34,7 @@ class App extends Component {
                         <PrivateRoute path='/subscription' component={Subscription} />
                         <Route path="/login" component={Login} />
                         <Route path="/signup" component={Signup} />
+                        <Route path="/upgrade" component={Upgrade} />
                     </div>
                     <Footer />
                     <ToastContainer />
