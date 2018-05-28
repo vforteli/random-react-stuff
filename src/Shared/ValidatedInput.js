@@ -7,7 +7,8 @@ class ValidatedInput extends Component {
         this.state = {
             touched: false,
             hasError: false,
-            validity: {}
+            validity: {},
+            errorMessage: ''    // todo refactor used for server side error messages... probably needs an array
         };
     }
 
@@ -24,13 +25,12 @@ class ValidatedInput extends Component {
         //console.debug(e.target.validity.customError)
         const target = e.target;
         if (this.props.customValidator) {
+            // todo custom validators should return boolean valid and an optional message
+            // todo refactor
             const customResult = await this.props.customValidator(target.value);
-            if (!customResult) {
-                target.setCustomValidity('Email already registered'); // refactor message
-            }
-            else {
-                target.setCustomValidity('');
-            }
+            const message = 'Email already registered';
+            target.setCustomValidity(!customResult ? message : '');
+            this.setState({ errorMessage: !customResult ? message : '' });
         }
 
         const valid = target.checkValidity();

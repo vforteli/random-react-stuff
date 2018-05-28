@@ -114,7 +114,6 @@ class Signup extends Component {
 
 
     handleVatNumberChange = (event) => {
-        event.persist();
         this.setState({ vatnumber: event.target.value });
         this.checkVatNumber(event.target.value);
     }
@@ -303,11 +302,12 @@ class Signup extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <TextInputValidated type="text" label='VAT Number' className="form-control" value={this.state.vatnumber} onChange={this.handleVatNumberChange} placeholder={this.state.country + '00000000'} />
-                                                    {this.state.viesName}
-                                                    {this.state.checkingVatNumber && <p>Checking VAT Number...</p>}
-                                                    {this.state.vatnumber && !this.state.vatExempt && !this.state.checkingVatNumber && <p>This does not appear to be an EU vat number</p>}
-                                                    <small className="text-muted">If you have a valid EU VAT number please enter it here starting with the country code</small>
+                                                    <TextInputValidated type="text" label='VAT Number' className="form-control" value={this.state.vatnumber} onChange={this.handleVatNumberChange} placeholder={this.state.country + '00000000'}>
+                                                        {this.state.checkingVatNumber && <p>Checking VAT Number...</p>}
+                                                        {this.state.viesName && <p>{this.state.viesName}</p>}
+                                                        {this.state.vatnumber && !this.state.vatExempt && !this.state.checkingVatNumber && <p>This does not appear to be an EU vat number</p>}
+                                                        <small className="text-muted">If you have a valid EU VAT number please enter it here starting with the country code</small>
+                                                    </TextInputValidated>
                                                 </div>
                                             </div>
                                         </div>
