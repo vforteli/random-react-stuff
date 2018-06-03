@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
-import StripeCheckout from 'react-stripe-checkout';
 import debounce from 'debounce-promise';
 
 import { ButtonLoading } from '../Shared/components';
@@ -37,7 +36,6 @@ class Signup extends Component {
             product: product,
             vatnumber: '',
             licenseCount: 1,
-            stripeCheckoutDisabled: true,
             paymentMethod: 'CreditCard',
             products: [
                 { id: 'ipass_monthly_dkk', title: 'iPass Monthly Susbcription', price: 186.00, interval: 'Month' },
@@ -46,11 +44,47 @@ class Signup extends Component {
         };
     }
 
-    async componentWillMount() {
-        axios.get('http://localhost:64730/api/settings/stripe').then((response) => {
-            this.setState({ stripeKey: response.data });
+
+    loadStripe(onload) {
+        if (!window.StripeCheckout) {
+            const script = document.createElement('script');
+            script.onload = function () {
+                console.info("Stripe script loaded");
+                onload();
+            };
+            script.src = 'https://checkout.stripe.com/checkout.js';
+            document.head.appendChild(script);
+        } else {
+            onload();
+        }
+    }
+
+    async componentDidMount() {
+        const response = await axios.get('http://localhost:64730/api/settings/stripe');
+
+        this.loadStripe(() => {
+            this.stripeHandler = window.StripeCheckout.configure({
+                key: response.data,
+                image: '/content/img/flexinets_logo.png',
+                locale: 'auto',
+                allowRememberMe: false,
+                token: this.onToken
+            });
+
+            this.setState({
+                stripeLoading: false,
+                loading: false,
+            });
         });
     }
+
+
+    componentWillUnmount() {
+        if (this.stripeHandler) {
+            this.stripeHandler.close();
+        }
+    }
+
 
 
     getSelectedProduct() {
@@ -147,10 +181,16 @@ class Signup extends Component {
     handleSubmit = (event) => {
         console.debug('hur');
         if (this.state.paymentMethod === 'CreditCard') {
-            this.setState({ stripeCheckoutDisabled: false });
+            this.stripeHandler.open({
+                name: 'Flexible Networks Nordic AB',
+                description: this.getSelectedProduct().title,
+                currency: this.state.currency.toUpperCase(),
+                amount: this.getTotalSum() * 100,
+                email: this.state.email
+            });
+            event.preventDefault();
         }
-
-        if (this.state.paymentMethod !== 'CreditCard') {
+        else {
             this.setState({ loading: true, processingPayment: true });
             setTimeout(() => {
                 this.setState({ loading: false, processingPayment: false });
@@ -160,9 +200,9 @@ class Signup extends Component {
     }
 
 
-    onToken = (event) => {
+    onToken = (token) => {
         console.debug('onToken');
-        console.debug(event);
+        console.debug(token);
         this.createAccount();
     }
 
@@ -345,22 +385,8 @@ class Signup extends Component {
                                         <label className="custom-control-label" htmlFor="accepttoc">I have read and accept the</label> <a href="" onClick={this.onModalToggle}>Terms & Conditions</a>
                                     </div>
 
-                                    {this.state.stripeKey &&
-                                        <StripeCheckout
-                                            disabled={this.state.stripeCheckoutDisabled}
-                                            name='Flexible Networks Nordic AB'
-                                            description={this.getSelectedProduct().title}
-                                            currency={this.state.currency.toUpperCase()}
-                                            amount={this.getTotalSum() * 100}
-                                            image='/content/img/flexinets_logo.png'
-                                            email={this.state.email}
-                                            allowRememberMe={false}
-                                            token={this.onToken}
-                                            stripeKey={this.state.stripeKey}
-                                        >
-                                            <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-lg btn-primary">Pay and Create Account</ButtonLoading>
-                                        </StripeCheckout>
-                                    }
+
+                                    <ButtonLoading type="submit" loading={this.state.loading} className="btn btn-block btn-lg btn-primary">Pay and Create Account</ButtonLoading>
                                 </div>
                             </div>
                         </ValidatedForm>
