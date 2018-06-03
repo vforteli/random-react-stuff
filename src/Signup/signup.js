@@ -324,10 +324,10 @@ class Signup extends Component {
 
                                                 <div className="list-group mb-2">
                                                     <label className={this.state.paymentMethod === 'CreditCard' ? 'list-group-item list-group-item-action shop-list-active' : 'list-group-item list-group-item-action'}>
-                                                        <input type="radio" name="paymentMethod" defaultChecked required value="CreditCard" onChange={this.handleChange} /> <span className="h5"> Credit Card</span> <img src="/Content/img/cc.svg" alt="cclogo" className="cclogo" /> <img className="float-right" src="/Content/img/powered_by_stripe.png" alt="powered by stripe" />
+                                                        <input type="radio" name="paymentMethod" checked={this.state.paymentMethod === 'CreditCard'} required value="CreditCard" onChange={this.handleChange} /> <span className="h5"> Credit Card</span> <img src="/Content/img/cc.svg" alt="cclogo" className="cclogo" /> <img className="float-right" src="/Content/img/powered_by_stripe.png" alt="powered by stripe" />
                                                     </label>
                                                     <label className={this.state.paymentMethod === 'Invoice' ? 'list-group-item list-group-item-action shop-list-active' : 'list-group-item list-group-item-action'}>
-                                                        <input type="radio" name="paymentMethod" required value="Invoice" onChange={this.handleChange} /> <span className="h5"> Invoice</span> <i className="far fa-envelope"></i> <small className="float-right text-muted">Invoices sent by email {this.state.country === 'DK' && 'or EAN'}</small>
+                                                        <input type="radio" name="paymentMethod" checked={this.state.paymentMethod === 'Invoice'} required value="Invoice" onChange={this.handleChange} /> <span className="h5"> Invoice</span> <i className="far fa-envelope"></i> <small className="float-right text-muted">Invoices sent by email {this.state.country === 'DK' && 'or EAN'}</small>
                                                     </label>
                                                 </div>
                                             </div>
