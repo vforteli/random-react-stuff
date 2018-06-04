@@ -285,7 +285,7 @@ class Signup extends Component {
                                             <TextAreaInputValidated rows='1' label='Street address' name='streetaddress' value={this.state.streetaddress} onChange={this.handleChange} placeholder='Street address' required />
                                         </div>
                                         <div className="col-md-3">
-                                            <TextInputValidated type="text" label='Postcode' name='postcode' value={this.state.poastcode} onChange={this.handleChange} placeholder='Postcode / ZIP' required />
+                                            <TextInputValidated type="text" label='Postcode' name='postcode' value={this.state.postcode} onChange={this.handleChange} placeholder='Postcode / ZIP' required />
                                         </div>
                                         <div className="col-md-3">
                                             <TextInputValidated type="text" label='City' name='city' value={this.state.city} onChange={this.handleChange} placeholder='City' required />
