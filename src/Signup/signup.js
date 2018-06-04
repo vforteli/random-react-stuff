@@ -11,7 +11,7 @@ import TextInputValidated from '../Shared/TextInputValidated';
 import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
 import { checkEmailAvailability } from '../Shared/authentication';
 import ValidatedForm from '../Shared/ValidatedForm';
-import { loadStripe } from '../Shared/StripeHandler';
+import { createStripeHandler } from '../Shared/StripeHandler';
 
 
 class Signup extends Component {
@@ -47,19 +47,7 @@ class Signup extends Component {
 
 
     async componentDidMount() {
-        const response = await axios.get('http://localhost:64730/api/settings/stripe');
-
-        loadStripe(() => {
-            this.stripeHandler = window.StripeCheckout.configure({
-                key: response.data,
-                image: '/content/img/flexinets_logo.png',
-                locale: 'auto',
-                allowRememberMe: false,
-                token: this.onToken
-            });
-
-            this.setState({ loading: false });
-        });
+        this.stripeHandler = await createStripeHandler(this.onToken);
     }
 
 
@@ -166,13 +154,11 @@ class Signup extends Component {
         console.debug('hur');
         if (this.state.paymentMethod === 'CreditCard') {
             this.stripeHandler.open({
-                name: 'Flexible Networks Nordic AB',
                 description: this.getSelectedProduct().title,
                 currency: this.state.currency.toUpperCase(),
                 amount: this.getTotalSum() * 100,
                 email: this.state.email
             });
-            event.preventDefault();
         }
         else {
             this.setState({ loading: true, processingPayment: true });
