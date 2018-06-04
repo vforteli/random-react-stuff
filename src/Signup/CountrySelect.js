@@ -35,7 +35,7 @@ export class CountrySelect extends Component {
 
     render() {
         return (
-            <select className="form-control" value={this.props.value} required={this.props.required} onChange={this.handleCountryChange} defaultValue=''>
+            <select className="form-control" value={this.props.value} required={this.props.required} onChange={this.handleCountryChange}>
                 <option value='' disabled>Select country...</option>
                 {this.state.countries && this.state.countries.map(country => <option key={country.code} value={country.code}>{country.name}</option>)}
             </select>
