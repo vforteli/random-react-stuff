@@ -13,6 +13,7 @@ import { checkEmailAvailability } from '../Shared/authentication';
 import ValidatedForm from '../Shared/ValidatedForm';
 import { createStripeHandler } from '../Shared/StripeHandler';
 
+// todo refactor the products into a cart of some sort
 
 class Signup extends Component {
     constructor(props) {
@@ -26,13 +27,21 @@ class Signup extends Component {
         }
 
         this.state = {
-            name: '',
-            companyname: '',
-            email: '',
-            password: '',
-            postcode: '',
-            city: '',
-            streetaddress: '',
+            name: 'test test',
+            companyname: 'test company',
+            email: 'testtt@example.com',
+            password: 'testtt',
+            postcode: '0000',
+            city: 'test',
+            streetaddress: 'test test',
+            //name: '',
+            //companyname: '',
+            //email: '',
+            //password: '',
+            //postcode: '',
+            //city: '',
+            //streetaddress: '',
+            country: '',
             currency: currency,
             product: product,
             vatnumber: '',
@@ -47,7 +56,7 @@ class Signup extends Component {
 
 
     async componentDidMount() {
-        this.stripeHandler = await createStripeHandler(this.onToken);
+        this.stripeHandler = await createStripeHandler((token) => { this.createAccount(token); });
     }
 
 
@@ -151,8 +160,9 @@ class Signup extends Component {
 
 
     handleSubmit = (event) => {
-        console.debug('hur');
+        console.debug('handleSubmit');
         if (this.state.paymentMethod === 'CreditCard') {
+            console.debug('handling payment with stripe');
             this.stripeHandler.open({
                 description: this.getSelectedProduct().title,
                 currency: this.state.currency.toUpperCase(),
@@ -161,6 +171,7 @@ class Signup extends Component {
             });
         }
         else {
+            console.debug('handling payment with invoice');
             this.setState({ loading: true, processingPayment: true });
             setTimeout(() => {
                 this.setState({ loading: false, processingPayment: false });
@@ -170,15 +181,29 @@ class Signup extends Component {
     }
 
 
-    onToken = (token) => {
-        console.debug('onToken');
-        console.debug(token);
-        this.createAccount();
-    }
-
-
-    createAccount() {
+    createAccount(stripeToken) {
+        // todo aaaah do i have to use redux now?
+        const model = {
+            name: this.state.name,
+            companyname: this.state.companyname,
+            email: this.state.email,
+            password: this.state.password,
+            postcode: this.state.postcode,
+            city: this.state.city,
+            streetaddress: this.state.streetaddress,
+            country: this.state.country,
+            currency: this.state.currency,
+            product: this.state.product,
+            vatnumber: this.state.vatnumber,
+            licenseCount: this.state.licenseCount,
+            paymentMethod: this.state.paymentMethod,
+            stripeToken: stripeToken,
+            signupType: this.state.signupType,
+            ean: this.state.ean,
+            vatExempt: this.state.vatExempt
+        }
         console.debug('create account');
+        console.debug(model);
         console.debug('redirect to login and sign in');
     }
 

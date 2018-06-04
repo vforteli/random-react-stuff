@@ -26,6 +26,7 @@ function loadStripe() {
 
 /**
  * Create a stripeHandler with specified onToken function
+ * The onToken function is called when a successful payment is made
  * @param {Function} onToken
  */
 export async function createStripeHandler(onToken) {
