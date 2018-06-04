@@ -11,6 +11,7 @@ import TextInputValidated from '../Shared/TextInputValidated';
 import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
 import { checkEmailAvailability } from '../Shared/authentication';
 import ValidatedForm from '../Shared/ValidatedForm';
+import { loadStripe } from '../Shared/StripeHandler';
 
 
 class Signup extends Component {
@@ -45,24 +46,10 @@ class Signup extends Component {
     }
 
 
-    loadStripe(onload) {
-        if (!window.StripeCheckout) {
-            const script = document.createElement('script');
-            script.onload = function () {
-                console.info("Stripe script loaded");
-                onload();
-            };
-            script.src = 'https://checkout.stripe.com/checkout.js';
-            document.head.appendChild(script);
-        } else {
-            onload();
-        }
-    }
-
     async componentDidMount() {
         const response = await axios.get('http://localhost:64730/api/settings/stripe');
 
-        this.loadStripe(() => {
+        loadStripe(() => {
             this.stripeHandler = window.StripeCheckout.configure({
                 key: response.data,
                 image: '/content/img/flexinets_logo.png',
@@ -71,10 +58,7 @@ class Signup extends Component {
                 token: this.onToken
             });
 
-            this.setState({
-                stripeLoading: false,
-                loading: false,
-            });
+            this.setState({ loading: false });
         });
     }
 
