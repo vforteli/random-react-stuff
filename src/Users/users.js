@@ -7,26 +7,20 @@ import DeleteUser from './DeleteUser';
 class Users extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            users: null
-        };
+        this.state = { users: null };
     }
 
-    componentWillMount() {
-        axios.get('http://localhost:64730/api/users/').then(response => {   // todo refactor url
-            if (response.status === 200) {
-                this.setState({ users: response.data });
-            }
-        }, function (response) {
-            console.debug('Couldnt load users...');
-        });
+    async componentWillMount() {
+        const response = await axios.get('/api/users/');
+        this.setState({ users: response.data });
     }
 
 
-    onClosed = (result) => {
+    onClosed = async (result) => {
         if (result) {
-            // todo reload
             console.debug('reload users');
+            const response = await axios.get('/api/users/');
+            this.setState({ users: response.data });
         }
         this.props.history.push('/users');
     }
@@ -56,7 +50,7 @@ class Users extends Component {
                     <div ng-if="users.length === 0" className="text-center" ui-sref="users.detail.create()">
                         <h4>No users yet!</h4>
                         <p>Click here to add first user and get started</p>
-                        <a ui-sref="users.detail.create()" className="btn btn-primary"><span className="fas fa-plus"></span> Add user</a>
+                        <Link to='/users/create' className="btn btn-primary"><span className="fas fa-plus"></span> Add User</Link>
                     </div>
                 }
 

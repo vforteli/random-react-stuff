@@ -14,7 +14,7 @@ class Subscription extends Component {
     }
 
     async componentDidMount() {
-        const response = await axios.get('http://localhost:64730/api/stripe/self');
+        const response = await axios.get('/api/stripe/self');
         if (response.status === 200) {
             this.setState({ stripe: response.data });
         }

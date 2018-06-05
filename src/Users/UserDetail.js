@@ -23,7 +23,7 @@ class UserDetail extends ModalForm {
 
     componentWillMount() {
         if (this.state.userId) {
-            axios.get('http://localhost:64730/api/users/' + this.state.userId).then(response => {
+            axios.get('/api/users/' + this.state.userId).then(response => {
                 if (response.status === 200) {
                     this.setState({
                         username: response.data.Username,
@@ -36,7 +36,7 @@ class UserDetail extends ModalForm {
             });
         }
         else {
-            axios.get('http://localhost:64730/api/users/getrandomusername').then(response => {
+            axios.get('/api/users/getrandomusername').then(response => {
                 this.setState({ username: response.data });
             });
         }

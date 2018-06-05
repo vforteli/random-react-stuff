@@ -19,7 +19,10 @@ import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
     componentWillMount() {
         axios.defaults.validateStatus = (status) => { return status >= 200 && status < 500; };
+        axios.defaults.baseURL = 'http://localhost:64730';
         axios.interceptors.request.use(async config => authInterceptor(config));
+
+        // todo add global error interceptor?
     }
 
 
