@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { CreditCardLogo } from './creditcardlogo';
+import CreditCardLogo from './creditcardlogo';
 import { createStripeHandler } from '../Shared/StripeHandler';
 import { getCurrentUser } from '../Shared/authentication';
 import { ButtonLoading } from '../Shared/components';
@@ -26,8 +26,7 @@ class Cards extends Component {
 
 
 
-    updateCard = () => {
-        this.setState({ loading: true });
+    updateCard = () => {        
         this.stripeHandler.open({
             email: getCurrentUser().EmailAddress,
             panelLabel: 'Update card'
@@ -36,6 +35,7 @@ class Cards extends Component {
 
 
     onToken = async (token) => {
+        this.setState({ loading: true });
         // validate token or let server side handle that?        
         const response = await axios.put('/api/stripe/card', { tokenId: token.id });
         if (response.status === 200) {

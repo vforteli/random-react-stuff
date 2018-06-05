@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import moment from 'moment';
-import { CreditCardLogo } from './creditcardlogo';
+import CreditCardLogo from './creditcardlogo';
 
 
 export function Charges(props) {
