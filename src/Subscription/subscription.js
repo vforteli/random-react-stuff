@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Charges } from './charges';
-import { Cards } from './cards';
+import Cards from './cards';
 import { Subscriptions } from './subscriptions';
 
 class Subscription extends Component {
