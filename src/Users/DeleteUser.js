@@ -12,8 +12,7 @@ class DeleteUser extends ModalForm {
 
         this.state = {
             userId: parseInt(props.match.params.userid, 10),
-            modal: true,
-            result: false
+            modal: true
         };
     }
 

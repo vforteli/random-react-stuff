@@ -201,7 +201,7 @@ class Signup extends Component {
             signupType: this.state.signupType,
             ean: this.state.ean,
             vatExempt: this.state.vatExempt
-        }
+        };
         console.debug('create account');
         console.debug(model);
         console.debug('redirect to login and sign in');

@@ -53,6 +53,7 @@ export async function beginReset(email) {
 
 
 export async function authInterceptor(config) {
+    // With credentials must be enabled for requests to login and logout url, because the refresh token is stored as a http only cookie
     if (config.url.indexOf(LOGIN_URL) >= 0 || config.url.indexOf(LOGOUT_URL) >= 0) {
         config.withCredentials = true;
         return config;
@@ -60,18 +61,17 @@ export async function authInterceptor(config) {
     else {
         const accessToken = await getRefreshedAccessToken();
         if (accessToken !== null) {
-            config.headers.authorization = `Bearer ` + accessToken;
+            config.headers.authorization = `Bearer ${accessToken}`;
         }
     }
     return config;
 }
 
 
-export function logout() {
+export async function logout() {
     clearTokenContext();
-    return axios.post(LOGOUT_URL).then(function (response) {
-        console.debug('Logged out');
-    });
+    await axios.post(LOGOUT_URL);
+    console.debug('Logged out');
 }
 
 
