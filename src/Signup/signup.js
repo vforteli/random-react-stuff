@@ -34,6 +34,7 @@ class Signup extends Component {
             postcode: '0000',
             city: 'test',
             streetaddress: 'test test',
+            accepttermsandconditions: true,
             //name: '',
             //companyname: '',
             //email: '',
@@ -41,6 +42,7 @@ class Signup extends Component {
             //postcode: '',
             //city: '',
             //streetaddress: '',
+            //accepttermsandconditions: false,
             country: '',
             currency: currency,
             product: product,
@@ -200,7 +202,8 @@ class Signup extends Component {
             stripeToken: stripeToken,
             signupType: this.state.signupType,
             ean: this.state.ean,
-            vatExempt: this.state.vatExempt
+            vatExempt: this.state.vatExempt,
+            accepttermsandconditions: this.state.accepttermsandconditions
         };
         console.debug('create account');
         console.debug(model);
@@ -376,7 +379,7 @@ class Signup extends Component {
                                     </div>
 
                                     <div className="custom-control custom-checkbox m-4">
-                                        <input type="checkbox" className="custom-control-input" name='accepttermsandconditions' id="accepttoc" required value={this.state.accepttermsandconditions} onChange={this.handleChange} />
+                                        <input type="checkbox" className="custom-control-input" name='accepttermsandconditions' id="accepttoc" required checked={this.state.accepttermsandconditions} onChange={this.handleChange} />
                                         <label className="custom-control-label" htmlFor="accepttoc">I have read and accept the</label> <a href="" onClick={this.onModalToggle}>Terms & Conditions</a>
                                     </div>
 
