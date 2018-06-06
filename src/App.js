@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from 'axios';
 
@@ -29,19 +29,21 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <div className="modal-blur">
-                    <Menu />
-                    <div className="site-content">
-                        <PrivateRoute exact path='/' component={Home} />
-                        <PrivateRoute path='/users' component={Users} />
-                        <PrivateRoute path='/subscription' component={Subscription} />
-                        <Route path="/login" component={Login} />
-                        <Route path="/signup" component={Signup} />
-                        <Route path="/upgrade" component={Upgrade} />
+                <Fragment>
+                    <div className="modal-blur">
+                        <Menu />
+                        <div className="site-content">
+                            <PrivateRoute exact path='/' component={Home} />
+                            <PrivateRoute path='/users' component={Users} />
+                            <PrivateRoute path='/subscription' component={Subscription} />
+                            <Route path="/login" component={Login} />
+                            <Route path="/signup" component={Signup} />
+                            <Route path="/upgrade" component={Upgrade} />
+                        </div>
+                        <Footer />
                     </div>
-                    <Footer />
                     <ToastContainer />
-                </div >
+                </Fragment>
             </Router>
         );
     }
