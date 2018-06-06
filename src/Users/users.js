@@ -10,7 +10,7 @@ class Users extends Component {
         this.state = { users: null };
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         const response = await axios.get('/api/users/');
         this.setState({ users: response.data });
     }

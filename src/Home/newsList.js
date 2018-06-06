@@ -9,7 +9,7 @@ class NewsList extends Component {
         this.state = { newsItems: null };
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         const response = await axios.get('https://api.flexinets.se/api/news/');
         this.setState({ newsItems: response.data });
     }
@@ -19,27 +19,23 @@ class NewsList extends Component {
         return (
             <Fragment>
                 <h4>News</h4>
-                <NewsItems items={this.state.newsItems} />
+                <div className="news">
+                    {this.state.newsItems === null && <div className="chartloading"></div>}
+                    {this.state.newsItems &&
+                        this.state.newsItems.map((item, index) =>
+                            <article key={index}>
+                                <span className="newsdate">{moment(item.CreatedOn).format('MMMM Do')}</span>
+                                <header>{item.Title}</header>
+                                <p>{item.Text}</p>
+                                <a href={item.Url}>Read more</a>
+                            </article>
+                        )
+                    }
+                </div>
             </Fragment>
         );
     }
 }
-
-const NewsItems = props =>
-    <div className="news">
-        {props.items === null && <div className="chartloading"></div>}
-        {props.items &&
-            props.items.map((item, index) =>
-                <article key={index}>
-                    <span className="newsdate">{moment(item.CreatedOn).format('MMMM Do')}</span>
-                    <header>{item.Title}</header>
-                    <p>{item.Text}</p>
-                    <a href={item.Url}>Read more</a>
-                </article>
-            )
-        }
-    </div>;
-
 
 
 export default NewsList;

@@ -23,7 +23,7 @@ class UserDetail extends ModalForm {
         };
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         if (this.state.userId) {
             const response = await axios.get('/api/users/' + this.state.userId);
             if (response.status === 200) {

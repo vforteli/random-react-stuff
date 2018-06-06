@@ -21,7 +21,7 @@ class Account extends ModalForm {
     }
 
 
-    async componentWillMount() {
+    async componentDidMount() {
         const response = await axios.get(ACCOUNT_URL);
         this.setState({
             email: response.data.EmailAddress,
