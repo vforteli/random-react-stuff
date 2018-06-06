@@ -18,29 +18,24 @@ class UserDetail extends ModalForm {
             username: '',
             fullname: '',
             email: '',
-            modal: true,
-            result: false
+            modal: true
         };
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         if (this.state.userId) {
-            axios.get('/api/users/' + this.state.userId).then(response => {
-                if (response.status === 200) {
-                    this.setState({
-                        username: response.data.Username,
-                        fullname: response.data.Fullname,
-                        email: response.data.EmailAddress
-                    });
-                }
-            }, function (response) {
-                console.debug('Couldnt load user...');
-            });
+            const response = await axios.get('/api/users/' + this.state.userId);
+            if (response.status === 200) {
+                this.setState({
+                    username: response.data.Username,
+                    fullname: response.data.Fullname,
+                    email: response.data.EmailAddress
+                });
+            }
         }
         else {
-            axios.get('/api/users/getrandomusername').then(response => {
-                this.setState({ username: response.data });
-            });
+            const response = await axios.get('/api/users/getrandomusername');
+            this.setState({ username: response.data });
         }
     }
 
