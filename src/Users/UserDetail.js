@@ -7,6 +7,7 @@ import { ButtonLoading } from '../Shared/components';
 import ModalForm from '../Shared/ModalForm';
 import debounce from 'debounce-promise';
 import { toast } from 'react-toastify';
+import UserRepository from './UserRepository';
 
 
 class UserDetail extends ModalForm {
@@ -40,13 +41,7 @@ class UserDetail extends ModalForm {
     }
 
 
-    checkUsernameAvailability = debounce(async (username) => {
-        if (username) {
-            const response = await axios.get(`/api/users/checkusernameavailability?username=${username}`);
-            return response.data.available;
-        }
-        return true;
-    }, 700, { leading: true });
+    checkUsernameAvailability = debounce(UserRepository.checkUsernameAvailability, 700, { leading: true });
 
 
     handleChange = (event) => {
@@ -65,7 +60,7 @@ class UserDetail extends ModalForm {
             Username: this.state.username,
             EmailAddress: this.state.email,
             invite: false
-        }
+        };
 
         // todo refactor this into user repository or similar
         if (this.state.userId) {
