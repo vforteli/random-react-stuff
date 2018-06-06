@@ -8,6 +8,12 @@ class UserRepository {
         }
         return true;
     }
+
+
+    static getRandomUsername = async () => {
+        const response = await axios.get('/api/users/getrandomusername');
+        return response.data;
+    }
 }
 
 export default UserRepository

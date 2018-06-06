@@ -35,8 +35,7 @@ class UserDetail extends ModalForm {
             }
         }
         else {
-            const response = await axios.get('/api/users/getrandomusername');
-            this.setState({ username: response.data });
+            this.setState({ username: await UserRepository.getRandomUsername() });
         }
     }
 
