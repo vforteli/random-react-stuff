@@ -5,6 +5,8 @@ import TextInputValidated from '../Shared/TextInputValidated';
 import ValidatedForm from '../Shared/ValidatedForm';
 import { ButtonLoading } from '../Shared/components';
 import ModalForm from '../Shared/ModalForm';
+import debounce from 'debounce-promise';
+import { toast } from 'react-toastify';
 
 
 class UserDetail extends ModalForm {
@@ -42,6 +44,16 @@ class UserDetail extends ModalForm {
         }
     }
 
+
+    checkUsernameAvailability = debounce(async (username) => {
+        if (username) {
+            const response = await axios.get(`/api/users/checkusernameavailability?username=${username}`);
+            return response.data.available;
+        }
+        return true;
+    }, 700, { leading: true });
+
+
     handleChange = (event) => {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -52,10 +64,41 @@ class UserDetail extends ModalForm {
 
     handleSubmit = async (event) => {
         this.setState({ loading: true });
-        this.setState({ result: this.state.userId });
+
+        const model = {
+            Fullname: this.state.fullname,
+            Username: this.state.username,
+            EmailAddress: this.state.email,
+            invite: false
+        }
+
+        // todo refactor this into user repository or similar
+        if (this.state.userId) {
+            const response = await axios.put(`/api/users/${this.state.userId}`, model);
+            if (response.status === 200) {
+                toast.success('The user was saved');
+                this.dismiss(this.state.userId);
+            }
+            else {
+                toast.error(`Something went wrong: ${response.statusText}`);
+            }
+        }
+        else {
+            model.invite = true;
+            const response = await axios.post('/api/users/', model);
+            if (response.status === 200) {
+                toast.success('The user was created');
+                toast.success(`An invite has been sent to ${model.EmailAddress}`);
+                this.dismiss(response.data.Item1);  // todo fix this in backend.. value tuple without name...
+            }
+            else {
+                toast.error(`Something went wrong: ${response.statusText}`);
+            }
+        }
+
         this.setState({ loading: false });
-        this.dismiss();
     }
+
 
     render() {
         return (
@@ -65,7 +108,7 @@ class UserDetail extends ModalForm {
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
                             <TextInputValidated type="text" name="fullname" label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
-                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} onChange={this.handleChange} placeholder="Username">
+                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailability} onChange={this.handleChange} placeholder="Username">
                                 {!this.state.userId &&
                                     <small className="form-text text-muted">
                                         Set to desired username or use a randomly generated. <br />
