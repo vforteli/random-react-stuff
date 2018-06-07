@@ -18,7 +18,6 @@ class Users extends Component {
 
     onClosed = async (result) => {
         if (result) {
-            console.debug('reload users');
             const response = await axios.get('/api/users/');
             this.setState({ users: response.data });
         }
@@ -90,7 +89,7 @@ class Users extends Component {
                                 <tbody>
                                     {this.state.users.map((user) =>
                                         <tr key={user.UserID}>
-                                            <td className="wrapcolumn"><input type="checkbox" ng-model="user.selected" /></td>
+                                            <td className="wrapcolumn"><input type="checkbox" /></td>
                                             <td className="pointer">
                                                 <div className="row">
                                                     <div className="col-md-5"><Link to={'/users/edit/' + user.UserID}>{user.Fullname}</Link></div>
