@@ -29,7 +29,7 @@ class Signup extends Component {
         this.state = {
             name: 'test test',
             companyname: 'test company',
-            email: 'testtt@example.com',
+            email: 'test@example.com',
             password: 'testtt',
             postcode: '0000',
             city: 'test',

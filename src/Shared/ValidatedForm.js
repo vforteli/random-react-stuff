@@ -8,7 +8,7 @@ class ValidatedForm extends React.Component {
     }
 
     // todo maybe use separate methods for valid and invalid submit
-    handleSubmit = async (event) => {
+    handleSubmit = (event) => {
         event.preventDefault();
         this.setState({ touched: true });
 

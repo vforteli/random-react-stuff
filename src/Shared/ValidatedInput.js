@@ -37,9 +37,6 @@ class ValidatedInput extends Component {
 
     // todo fix these names...
     checkValidity = async (target) => {
-        //console.debug(e.target.validity.valueMissing);
-        //console.debug(e.target.validity);
-        //console.debug(e.target.validity.customError)
         if (this.props.customValidator) {
             // todo custom validators should return boolean valid and an optional message
             // todo refactor
@@ -48,11 +45,10 @@ class ValidatedInput extends Component {
             target.setCustomValidity(!customResult ? message : '');
             this.setState({ errorMessage: !customResult ? message : '' });
         }
-
-        const valid = target.checkValidity();
+        
         this.setState({
             touched: true,
-            hasError: !valid,
+            hasError: !target.validity.valid,
             validity: target.validity
         });
     }

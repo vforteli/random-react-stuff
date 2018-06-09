@@ -51,6 +51,11 @@ class UserDetail extends ModalForm {
     }
 
 
+    dostuff = (e) => {
+        this.setState({ touched: true });
+    }
+
+
     handleSubmit = async (event) => {
         this.setState({ loading: true });
 
@@ -96,8 +101,8 @@ class UserDetail extends ModalForm {
                     <div className="modal-content">
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
-                            <TextInputValidated type="text" name="fullname" label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
-                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailability} onChange={this.handleChange} placeholder="Username">
+                            <TextInputValidated type="text" name="fullname" isFormTouched={this.state.touched} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
+                            <TextInputValidated type="text" name="username" isFormTouched={this.state.touched} readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailability} onChange={this.handleChange} placeholder="Username">
                                 {!this.state.userId &&
                                     <small className="form-text text-muted">
                                         Set to desired username or use a randomly generated. <br />
@@ -105,18 +110,19 @@ class UserDetail extends ModalForm {
                                     </small>
                                 }
                             </TextInputValidated>
-                            <TextInputValidated type="email" name="email" label="Email" required value={this.state.email} onChange={this.handleChange} placeholder="email@example.com">
+                            <TextInputValidated type="email" name="email" isFormTouched={this.state.touched} label="Email" required value={this.state.email} onChange={this.handleChange} placeholder="email@example.com">
                                 {!this.state.userId &&
                                     <div className="bs-callout bs-callout-info">
                                         <h4>Adding a new user</h4>
                                         After adding a user, an email invite for downloading the App will be sent to the user.<br />
-                                        The link must be clicked on the intended device.<br />
+                                        The link must be clicked on the intended devices.<br />
                                         If needed the invite can be resent later.
                                     </div>
                                 }
                             </TextInputValidated>
                         </ModalBody>
                         <ModalFooter>
+                            <button type="button" className="btn btn-info" onClick={this.dostuff}>Do stuff</button>
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">{this.state.userId ? 'Save user' : 'Add User & Send invite'}</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
