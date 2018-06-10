@@ -11,6 +11,9 @@ class ValidatedForm extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
         this.setState({ touched: true });
+        if (this.props.onTouched) {
+            this.props.onTouched(event);
+        }
 
         const valid = event.target.checkValidity();
         console.debug(`form isValid: ${valid}`);
@@ -21,7 +24,7 @@ class ValidatedForm extends React.Component {
     }
 
     render() {
-        const { onSubmit, ...rest } = this.props;
+        const { onSubmit, onTouched, ...rest } = this.props;
         return (
             <form {...rest} onSubmit={this.handleSubmit} className={this.state.touched ? 'was-validated' : ''} noValidate>
                 {this.props.children}

@@ -51,11 +51,6 @@ class UserDetail extends ModalForm {
     }
 
 
-    dostuff = (e) => {
-        this.setState({ touched: true });
-    }
-
-
     handleSubmit = async (event) => {
         this.setState({ loading: true });
 
@@ -97,7 +92,7 @@ class UserDetail extends ModalForm {
     render() {
         return (
             <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
-                <ValidatedForm onSubmit={this.handleSubmit}>
+                <ValidatedForm onSubmit={this.handleSubmit} onTouched={() => this.setState({ touched: true })} >
                     <div className="modal-content">
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
@@ -122,7 +117,6 @@ class UserDetail extends ModalForm {
                             </TextInputValidated>
                         </ModalBody>
                         <ModalFooter>
-                            <button type="button" className="btn btn-info" onClick={this.dostuff}>Do stuff</button>
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">{this.state.userId ? 'Save user' : 'Add User & Send invite'}</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
