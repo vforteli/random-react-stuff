@@ -40,8 +40,12 @@ class UserDetail extends ModalForm {
     }
 
 
-    checkUsernameAvailability = debounce(UserRepository.checkUsernameAvailability, 700, { leading: true });
+    checkUsernameAvailabilityValidator = debounce(async (value) => { return { valid: await UserRepository.checkUsernameAvailability(value), message: "Username already taken" } }, 700, { leading: true });
 
+
+    mockValidator = (value) => {
+        return { valid: false, message: 'This is not the validator you are looking for' }
+    }
 
     handleChange = (event) => {
         const target = event.target;
@@ -96,8 +100,8 @@ class UserDetail extends ModalForm {
                     <div className="modal-content">
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
-                            <TextInputValidated type="text" name="fullname" isFormTouched={this.state.touched} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
-                            <TextInputValidated type="text" name="username" isFormTouched={this.state.touched} readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailability} onChange={this.handleChange} placeholder="Username">
+                            <TextInputValidated type="text" name="fullname" isFormTouched={this.state.touched} customValidator={this.mockValidator} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
+                            <TextInputValidated type="text" name="username" isFormTouched={this.state.touched} readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailabilityValidator} onChange={this.handleChange} placeholder="Username">
                                 {!this.state.userId &&
                                     <small className="form-text text-muted">
                                         Set to desired username or use a randomly generated. <br />

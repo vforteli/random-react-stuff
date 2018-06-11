@@ -38,14 +38,11 @@ class ValidatedInput extends Component {
     // todo fix these names...
     checkValidity = async (target) => {
         if (!target.readOnly && this.props.customValidator) {
-            // todo custom validators should return boolean valid and an optional message
-            // todo refactor
-            const customResult = await this.props.customValidator(target.value);
-            const message = 'Email already registered';
-            target.setCustomValidity(!customResult ? message : '');
-            this.setState({ errorMessage: !customResult ? message : '' });
+            const customValidatorResult = await this.props.customValidator(target.value);
+            target.setCustomValidity(!customValidatorResult.valid ? customValidatorResult.message : '');
+            this.setState({ errorMessage: !customValidatorResult.valid ? customValidatorResult.message : '' });
         }
-        
+
         this.setState({
             touched: true,
             hasError: !target.validity.valid,

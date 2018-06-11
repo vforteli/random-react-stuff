@@ -111,7 +111,7 @@ class Signup extends Component {
     }
 
 
-    validateEmail = debounce(checkEmailAvailability, 700, { leading: true });
+    validateEmail = debounce(async (value) => { return { valid: await checkEmailAvailability(value), message: 'This email is already taken' } }, 700, { leading: true });
 
 
     handleCountryChanged = (country) => {
