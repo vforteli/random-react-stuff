@@ -19,7 +19,9 @@ class UserDetail extends ModalForm {
             username: '',
             fullname: '',
             email: '',
-            modal: true
+            modal: true,
+            password: '',
+            passwordconfirm: ''
         };
     }
 
@@ -45,6 +47,13 @@ class UserDetail extends ModalForm {
 
     mockValidator = (value) => {
         return { valid: false, message: 'This is not the validator you are looking for' };
+    }
+
+    comparePasswordValidator = (value) => {
+        if (value && value !== this.state.password) {
+            return { valid: false, message: 'Password does not match' };
+        }
+        return { valid: true };
     }
 
     handleChange = (event) => {
@@ -96,12 +105,12 @@ class UserDetail extends ModalForm {
     render() {
         return (
             <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
-                <ValidatedForm onSubmit={this.handleSubmit} onTouched={() => this.setState({ touched: true })} >
+                <ValidatedForm onSubmit={this.handleSubmit} >
                     <div className="modal-content">
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
-                            <TextInputValidated type="text" name="fullname" isFormTouched={this.state.touched} customValidator={this.mockValidator} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
-                            <TextInputValidated type="text" name="username" isFormTouched={this.state.touched} readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailabilityValidator} onChange={this.handleChange} placeholder="Username">
+                            <TextInputValidated type="text" name="fullname" customValidator={this.mockValidator} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
+                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailabilityValidator} onChange={this.handleChange} placeholder="Username">
                                 {!this.state.userId &&
                                     <small className="form-text text-muted">
                                         Set to desired username or use a randomly generated. <br />
@@ -109,7 +118,7 @@ class UserDetail extends ModalForm {
                                     </small>
                                 }
                             </TextInputValidated>
-                            <TextInputValidated type="email" name="email" isFormTouched={this.state.touched} label="Email" required value={this.state.email} onChange={this.handleChange} placeholder="email@example.com">
+                            <TextInputValidated type="email" name="email" label="Email" required value={this.state.email} onChange={this.handleChange} placeholder="email@example.com">
                                 {!this.state.userId &&
                                     <div className="bs-callout bs-callout-info">
                                         <h4>Adding a new user</h4>

@@ -9,20 +9,16 @@ class ValidatedInput extends Component {
             touched: false,
             hasError: false,
             validity: {},
-            formTouched: false,
             errorMessage: ''    // todo refactor used for server side error messages... probably needs an array
         };
     }
-
-
-    componentWillReceiveProps = (props) => {
-        if (!this.state.formTouched && props.isFormTouched) {
-            this.setState({ formTouched: true });
+    
+    componentDidUpdate(prevProps, prevState) {        
+        if (!prevProps.isFormTouched && this.props.isFormTouched) {
             console.debug('form touched, do something!');
             this.checkValidity(this.inputRef.current);
         }
     }
-
 
     handleChange = (e) => {
         this.props.onChange(e);

@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import ValidatedInput from './ValidatedInput';
+import { FormValidationContext } from './FormValidationContext';
 
 class TextInputValidated extends ValidatedInput {
     render() {
@@ -19,4 +20,8 @@ class TextInputValidated extends ValidatedInput {
     }
 }
 
-export default TextInputValidated;
+export default props => (
+    <FormValidationContext.Consumer>
+        {isFormTouched => <TextInputValidated {...props} isFormTouched={isFormTouched} />}
+    </FormValidationContext.Consumer>
+);
