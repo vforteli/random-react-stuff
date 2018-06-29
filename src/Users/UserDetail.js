@@ -40,11 +40,11 @@ class UserDetail extends ModalForm {
     }
 
 
-    checkUsernameAvailabilityValidator = debounce(async (value) => { return { valid: await UserRepository.checkUsernameAvailability(value), message: "Username already taken" } }, 700, { leading: true });
+    checkUsernameAvailabilityValidator = debounce(async (value) => { return { valid: await UserRepository.checkUsernameAvailability(value), message: "Username already taken" }; }, 700, { leading: true });
 
 
     mockValidator = (value) => {
-        return { valid: false, message: 'This is not the validator you are looking for' }
+        return { valid: false, message: 'This is not the validator you are looking for' };
     }
 
     handleChange = (event) => {
