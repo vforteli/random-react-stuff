@@ -1,6 +1,5 @@
 ﻿import React from 'react';
 import { FormValidationContext } from './FormValidationContext';
-//export const FormValidationContext = React.createContext();
 
 class ValidatedForm extends React.Component {
     constructor(props) {
@@ -14,6 +13,7 @@ class ValidatedForm extends React.Component {
         this.setState({ touched: true });
         event.preventDefault();
 
+        // todo this should also trigger custom validators
         const valid = event.target.checkValidity();
         console.debug(`form isValid: ${valid}`);
         if (valid) {

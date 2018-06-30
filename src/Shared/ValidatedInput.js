@@ -12,10 +12,10 @@ class ValidatedInput extends Component {
             errorMessage: ''    // todo refactor used for server side error messages... probably needs an array
         };
     }
-    
-    componentDidUpdate(prevProps, prevState) {        
+
+    componentDidUpdate(prevProps, prevState) {
         if (!prevProps.isFormTouched && this.props.isFormTouched) {
-            console.debug('form touched, do something!');
+            console.debug('form touched, check validity');
             this.checkValidity(this.inputRef.current);
         }
     }
