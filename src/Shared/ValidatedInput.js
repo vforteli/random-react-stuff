@@ -14,7 +14,7 @@ class ValidatedInput extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (!prevProps.isFormTouched && this.props.isFormTouched) {
-            console.debug('form touched, check validity');
+            console.debug('form touched, set validity');
             this.setValidity(this.inputRef.current);
         }
     }
@@ -33,7 +33,7 @@ class ValidatedInput extends Component {
             this.props.customValidators.forEach(async (validator) => {
                 const customValidatorResult = await validator(target.value);
                 console.debug(customValidatorResult);
-                target.setCustomValidity(!customValidatorResult.valid ? customValidatorResult.message : '');
+                target.setCustomValidity(!customValidatorResult.valid ? customValidatorResult.message : '');    // todo fix...
                 this.setState({ errorMessage: !customValidatorResult.valid ? customValidatorResult.message : '' });
             });
         }
