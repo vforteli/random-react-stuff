@@ -49,6 +49,12 @@ class UserDetail extends ModalForm {
         return { valid: false, message: 'This is not the validator you are looking for' };
     }
 
+
+    mockValidator2 = (value) => {
+        return { valid: false, message: 'Are you looking for this validator?' };
+    }
+
+
     comparePasswordValidator = (value) => {
         if (value && value !== this.state.password) {
             return { valid: false, message: 'Password does not match' };
@@ -109,8 +115,8 @@ class UserDetail extends ModalForm {
                     <div className="modal-content">
                         <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
                         <ModalBody>
-                            <TextInputValidated type="text" name="fullname" customValidator={this.mockValidator} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
-                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={this.checkUsernameAvailabilityValidator} onChange={this.handleChange} placeholder="Username">
+                            <TextInputValidated type="text" name="fullname" customValidator={[this.mockValidator, this.mockValidator2]} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
+                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} customValidator={[this.checkUsernameAvailabilityValidator]} onChange={this.handleChange} placeholder="Username">
                                 {!this.state.userId &&
                                     <small className="form-text text-muted">
                                         Set to desired username or use a randomly generated. <br />

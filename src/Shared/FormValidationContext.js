@@ -3,16 +3,21 @@
 export const FormValidationContext = React.createContext();
 
 
-/**
- * Adds context for form validation
- * @param {any} Component
- */
-export function withFormValidationContext(Component) {
-    return function (props) {
-        return (
-            <FormValidationContext.Consumer>
-                {isFormTouched => <Component {...props} isFormTouched={isFormTouched} />}
-            </FormValidationContext.Consumer>
-        );
+export function withValidation(WrappedComponent) {
+    return class extends React.Component {
+        constructor(props) {
+            super(props);
+            console.debug('wiiii');
+        }
+
+
+        render() {
+            return (
+                <FormValidationContext.Consumer>
+                    {isFormTouched => <WrappedComponent {...this.props} isFormTouched={isFormTouched} />}
+                </FormValidationContext.Consumer>
+            );
+        }
     };
 }
+

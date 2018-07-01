@@ -6,7 +6,6 @@ class ValidatedInput extends Component {
 
         this.inputRef = React.createRef();
         this.state = {
-            touched: false,
             hasError: false,
             validity: {},
             errorMessage: ''    // todo refactor used for server side error messages... probably needs an array
@@ -16,31 +15,33 @@ class ValidatedInput extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (!prevProps.isFormTouched && this.props.isFormTouched) {
             console.debug('form touched, check validity');
-            this.checkValidity(this.inputRef.current);
+            this.setValidity(this.inputRef.current);
         }
     }
 
     handleChange = (e) => {
         this.props.onChange(e);
-        this.setValidity(e);
+        this.checkValidity(e);
     }
 
 
-    // todo fix these names...
-    setValidity = async (e) => {
-        this.checkValidity(e.target);
-    }
+    checkValidity = async (e) => this.setValidity(e.target)
 
-    // todo fix these names...
-    checkValidity = async (target) => {
+
+    setValidity = async (target) => {
+        // todo rename customValidator attribute in all components
         if (!target.readOnly && this.props.customValidator) {
-            const customValidatorResult = await this.props.customValidator(target.value);
-            target.setCustomValidity(!customValidatorResult.valid ? customValidatorResult.message : '');
-            this.setState({ errorMessage: !customValidatorResult.valid ? customValidatorResult.message : '' });
+            this.props.customValidator.forEach(async (validator) => {
+                console.debug('validator!', validator);
+                const customValidatorResult = await validator(target.value);
+                console.debug(customValidatorResult);
+                target.setCustomValidity(!customValidatorResult.valid ? customValidatorResult.message : '');
+                this.setState({ errorMessage: !customValidatorResult.valid ? customValidatorResult.message : '' });
+            });
+
         }
 
         this.setState({
-            touched: true,
             hasError: !target.validity.valid,
             validity: target.validity
         });

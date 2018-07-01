@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import ValidatedInput from './ValidatedInput';
-import { withFormValidationContext } from './FormValidationContext';
+import { withValidation } from './FormValidationContext';
 
 class TextInputValidated extends ValidatedInput {
     render() {
@@ -8,7 +8,7 @@ class TextInputValidated extends ValidatedInput {
         return (
             <div className={this.props.required ? 'form-group required' : 'form-group'}>
                 <label htmlFor={this.props.name}>{this.props.label} {!this.props.required && <small>(Optional)</small>}</label>
-                <input onBlur={this.setValidity} className={this.state.hasError ? 'form-control is-invalid' : 'form-control'} {...rest} onChange={this.handleChange} ref={this.inputRef} />
+                <input onBlur={this.checkValidity} className={this.state.hasError ? 'form-control is-invalid' : 'form-control'} {...rest} onChange={this.handleChange} ref={this.inputRef} />
                 <div className="invalid-feedback">
                     {this.state.validity.valueMissing && 'This field is required'}
                     {!this.state.validity.valueMissing && this.state.validity.typeMismatch && 'This field is invalid'}
@@ -20,4 +20,4 @@ class TextInputValidated extends ValidatedInput {
     }
 }
 
-export default withFormValidationContext(TextInputValidated);
+export default withValidation(TextInputValidated);
