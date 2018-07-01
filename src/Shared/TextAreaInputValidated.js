@@ -1,9 +1,10 @@
 ﻿import React from 'react';
 import ValidatedInput from './ValidatedInput';
+import { withValidation } from './FormValidationContext';
 
 class TextAreaInputValidated extends ValidatedInput {
     render() {
-        const { children, customValidators, onChange, ...rest } = this.props;  // todo do this in ValidatedInput?
+        const { children, customValidators, isFormTouched, onChange, ...rest } = this.props;  // todo do this in ValidatedInput?
         return (
             <div className={this.props.required ? 'form-group required' : 'form-group'}>
                 <label htmlFor={this.props.name}>{this.props.label} {!this.props.required && <small>(Optional)</small>}</label>
@@ -17,4 +18,4 @@ class TextAreaInputValidated extends ValidatedInput {
     }
 }
 
-export default TextAreaInputValidated;
+export default withValidation(TextAreaInputValidated);
