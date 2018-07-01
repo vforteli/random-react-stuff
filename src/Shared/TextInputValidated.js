@@ -4,7 +4,7 @@ import { withValidation } from './FormValidationContext';
 
 class TextInputValidated extends ValidatedInput {
     render() {
-        const { children, customValidator, isFormTouched, onChange, ...rest } = this.props;
+        const { children, customValidators, isFormTouched, onChange, ...rest } = this.props;
         return (
             <div className={this.props.required ? 'form-group required' : 'form-group'}>
                 <label htmlFor={this.props.name}>{this.props.label} {!this.props.required && <small>(Optional)</small>}</label>

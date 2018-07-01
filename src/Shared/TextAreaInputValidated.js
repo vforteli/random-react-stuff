@@ -3,7 +3,7 @@ import ValidatedInput from './ValidatedInput';
 
 class TextAreaInputValidated extends ValidatedInput {
     render() {
-        const { children, customValidator, onChange, ...rest } = this.props;  // todo do this in ValidatedInput?
+        const { children, customValidators, onChange, ...rest } = this.props;  // todo do this in ValidatedInput?
         return (
             <div className={this.props.required ? 'form-group required' : 'form-group'}>
                 <label htmlFor={this.props.name}>{this.props.label} {!this.props.required && <small>(Optional)</small>}</label>

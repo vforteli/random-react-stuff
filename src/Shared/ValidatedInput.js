@@ -29,16 +29,13 @@ class ValidatedInput extends Component {
 
 
     setValidity = async (target) => {
-        // todo rename customValidator attribute in all components
-        if (!target.readOnly && this.props.customValidator) {
-            this.props.customValidator.forEach(async (validator) => {
-                console.debug('validator!', validator);
+        if (!target.readOnly && this.props.customValidators) {
+            this.props.customValidators.forEach(async (validator) => {
                 const customValidatorResult = await validator(target.value);
                 console.debug(customValidatorResult);
                 target.setCustomValidity(!customValidatorResult.valid ? customValidatorResult.message : '');
                 this.setState({ errorMessage: !customValidatorResult.valid ? customValidatorResult.message : '' });
             });
-
         }
 
         this.setState({
