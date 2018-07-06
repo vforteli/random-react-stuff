@@ -28,7 +28,7 @@ class Menu extends Component {
         return (
             <Fragment>
                 <Navbar className="navbar fixed-top navbar-expand-md navbar-light navbar-bg-flexinets">
-                    <NavbarBrand tag={Link} to={'/'}><img src="/Content/img/flexible-networks-nordic_logo-genomskinlig-300x77.png" alt="flexinets logo" /></NavbarBrand>
+                    <NavbarBrand tag={Link} to={'/'}>¡FRP!</NavbarBrand>
                     {isLoggedIn() &&
                         <Fragment>
                             <NavbarToggler onClick={() => this.setState({ navbarOpen: !this.state.navbarOpen })} />
@@ -36,6 +36,7 @@ class Menu extends Component {
                                 <Nav className="mr-auto" navbar>
                                     <NavItem><NavLink to='/users' activeClassName='menuactive' className="nav-link">Users</NavLink></NavItem>
                                     <NavItem><NavLink to='/subscription' activeClassName='menuactive' className="nav-link">Subscription</NavLink></NavItem>
+                                    <NavItem><NavLink to='/orders' activeClassName='menuactive' className="nav-link">Orders</NavLink></NavItem>
                                 </Nav>
                                 <Nav navbar>
                                     <UncontrolledDropdown nav inNavbar>

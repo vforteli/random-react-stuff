@@ -14,6 +14,7 @@ class ValidatedForm extends React.Component {
         event.preventDefault();
 
         // todo this should also trigger custom validators
+        // todo async validators?
         const valid = event.target.checkValidity();
         console.debug(`form isValid: ${valid}`);
         if (valid) {

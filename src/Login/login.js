@@ -57,7 +57,7 @@ class Login extends Component {
                 <div className="card mt-3">
                     <div className="card-body">
                         <form method="post" onSubmit={this.handleLogin} className="form-signin">
-                            <h3>Log in to Flexinets Global Wi-Fi</h3>
+                            <h3>Log in to ¡FRP!</h3>
 
                             <Alert color="warning" isOpen={this.state.alertVisible} toggle={this.onAlertDismiss}>{this.state.alertText}</Alert>
 
