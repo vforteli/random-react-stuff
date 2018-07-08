@@ -1,6 +1,6 @@
 ﻿import React, { Component, Fragment } from 'react';
 import { NavLink, Link, withRouter } from "react-router-dom";
-import { isLoggedIn, logout, getCurrentUser } from './Shared/authentication';
+import { isLoggedIn, logout, getCurrentUser } from 'flexinets-react-authentication';
 import { UncontrolledDropdown, DropdownItem, DropdownToggle, DropdownMenu, Navbar, Nav, NavbarBrand, NavbarToggler, NavItem, Collapse } from 'reactstrap';
 import Account from './Account/Account';
 import ChangePassword from './Account/ChangePassword';

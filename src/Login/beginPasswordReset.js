@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { beginReset } from '../Shared/authentication';
+import { beginReset } from 'flexinets-react-authentication';
 import ValidatedForm from '../Shared/ValidatedForm';
 import TextInputValidated from '../Shared/TextInputValidated';
 
