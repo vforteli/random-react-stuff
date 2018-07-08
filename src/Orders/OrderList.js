@@ -2,13 +2,18 @@
 import axios from 'axios';
 import { Route, Link } from 'react-router-dom';
 import moment from 'moment';
+import DeleteOrderModal from './DeleteOrderModal';
+import OrderDetail from './OrderDetail';
+import CreateOrderDetail from './CreateOrderDetail';
+import CustomerTypeIcon from './CustomerTypeIcon';
 
 class OrdersList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             orders: null,
-            count: 0
+            count: 0,
+            isDeleteModalOpen: false
         };
     }
 
@@ -21,11 +26,35 @@ class OrdersList extends Component {
     }
 
 
+    confirmDeleteOrder = (order) => {
+        this.setState({ isDeleteModalOpen: true, deleteOrder: order });
+    }
+
+
+    onClosed = async (result) => {
+        if (result) {
+            const response = await axios.get('/api/orders/');
+            this.setState({ users: response.data });
+        }
+        this.props.history.push('/orders');
+    }
+
+
+    onDeleteOrderModalClosed = (result) => {
+        this.setState({ isDeleteModalOpen: false, deleteOrder: null });
+        if (result) {
+            this.setState({ orders: this.state.orders.filter(o => o.invoice_id !== result) });
+        }
+    }
+
+
 
 
     render() {
         return (
             <div className="container">
+                {this.state.isDeleteModalOpen && <DeleteOrderModal onClosed={this.onDeleteOrderModalClosed} deleteOrder={this.state.deleteOrder} />}
+
                 <h3>Orders</h3>
 
                 {this.state.orders === null &&
@@ -42,9 +71,9 @@ class OrdersList extends Component {
                         <Route path="/users/create" />
                         <Route path="/users/edit/:id" />
                         <div className="card-body">
-                            <Link to='/users/create' className="btn btn-primary"><span className="fas fa-plus"></span> Create order</Link>{' '}
-                            <button className="btn btn-info"><i class="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
-                            <button className="btn btn-info"><i class="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>
+                            <Link to='/orders/create' className="btn btn-primary"><span className="fas fa-plus"></span> Create order</Link>{' '}
+                            <button className="btn btn-info"><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
+                            <button className="btn btn-info"><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>
 
 
                             <table className="table table-hover users-table">
@@ -62,7 +91,7 @@ class OrdersList extends Component {
                                 </thead>
                                 <tbody>
                                     {this.state.orders.map(order =>
-                                        <tr key={order.OrderId}>
+                                        <tr key={order.invoice_id}>
                                             <td className="wrapcolumn">
                                                 <div className="custom-control custom-checkbox">
                                                     <input type="checkbox" className="custom-control-input" required />
@@ -70,16 +99,12 @@ class OrdersList extends Component {
                                                 </div>
                                             </td>
                                             <td>{order.status === 0 && <i className={order.hold ? 'fas fa-pause text-warning' : 'fas fa-check text-success'}></i>}</td>
-                                            <td>
-                                                {order.CustomerType === 'Private' && <i class="fas fa-user"></i>}
-                                                {order.CustomerType === 'Paper' && <i class="fas fa-envelope-square"></i>}
-                                                {order.CustomerType === 'EInvoice' && <i class="fab fa-cloudversify"></i>}
-                                            </td>
+                                            <td><CustomerTypeIcon customerType={order.CustomerType} /></td>
                                             <td><Link to={'/orders/edit/' + order.invoice_id}>{order.address_name}</Link></td>
                                             <td>{moment(order.date_created).format('DD MMMM YYYY')}</td>
                                             <td>{order.date_invoices && moment(order.date_invoiced).format('DD MMMM YYYY')}</td>
                                             <td className="no-wrap">{order.TotalsumExcludingVAT} {order.CurrencyName}</td>
-                                            <td><Link to={'/orders/delete/' + order.invoice_id}><i className="fas fa-times"></i></Link></td>
+                                            <td><a href="" onClick={(e) => { e.preventDefault(); this.confirmDeleteOrder(order); }}><i className="fas fa-times"></i></a></td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -87,6 +112,9 @@ class OrdersList extends Component {
                         </div>
                     </div>
                 }
+
+                <Route path="/orders/create" render={props => <CreateOrderDetail {...props} onClosed={this.onClosed} />} />
+                <Route path="/orders/edit/:orderid" render={props => <OrderDetail {...props} onClosed={this.onClosed} />} />
             </div>
         );
     }
