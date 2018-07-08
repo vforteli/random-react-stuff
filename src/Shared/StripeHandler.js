@@ -11,6 +11,7 @@ const STRIPE_LOGO_URL = '/content/img/flexinets_logo.png';
  * */
 function loadStripe() {
     if (!window.StripeCheckout) {
+        console.debug('Loading stripe.js');
         return new Promise(function (resolve, reject) {
             const script = document.createElement('script');
             script.onload = resolve;
@@ -19,7 +20,8 @@ function loadStripe() {
             document.head.appendChild(script);
         });
     } else {
-        return Promise.resolve('already loaded');
+        console.debug('Stripe.js already loaded');
+        return Promise.resolve('Stripe script already loaded');
     }
 }
 
