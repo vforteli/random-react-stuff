@@ -49,8 +49,8 @@ class CreateOrderDetail extends ModalForm {
 
     handleSubmit = async (event) => {
         this.setState({ loading: true });
-
-
+        //const response = await axios.post('api/orders', )
+        //this.dismiss(response.data);
     }
 
 

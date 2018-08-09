@@ -6,6 +6,8 @@ import DeleteOrderModal from './DeleteOrderModal';
 import OrderDetail from './OrderDetail';
 import CreateOrderDetail from './CreateOrderDetail';
 import CustomerTypeIcon from './CustomerTypeIcon';
+import * as signalr from '@aspnet/signalr';
+import { getRefreshedAccessToken } from 'flexinets-react-authentication';
 
 class OrdersList extends Component {
     constructor(props) {
@@ -13,7 +15,9 @@ class OrdersList extends Component {
         this.state = {
             orders: null,
             count: 0,
-            isDeleteModalOpen: false
+            isDeleteModalOpen: false,
+            orderHubConnected: false,
+            orderHubConnection: null
         };
     }
 
@@ -23,8 +27,31 @@ class OrdersList extends Component {
             orders: response.data.Orders,
             count: response.data.Count
         });
+
+        // todo refactor setup of hub connection?
+        const accessToken = await getRefreshedAccessToken();
+        const connection = new signalr.HubConnectionBuilder()
+            .withUrl(`http://localhost:53848/hubs/ordershub?access_token=${accessToken}`)   // todo refactor url
+            .build();
+
+        connection.on('orderDeleted', (orderId) => {
+            console.debug(`Order ${orderId} was deleted`);
+            this.setState({ orders: this.state.orders.filter(o => o.invoice_id !== orderId) });
+        });
+
+        connection.start().then(result => {
+            console.debug('orderHub connected');
+            this.setState({ orderHubConnected: true });
+        }).catch(err => console.error(err.toString()));
+
+        this.setState({ orderHubConnection: connection });
     }
 
+
+    async componentWillUnmount() {
+        await this.state.orderHubConnection.stop();
+        console.debug('orderHub stopped');
+    }
 
     confirmDeleteOrder = (order) => {
         this.setState({ isDeleteModalOpen: true, deleteOrder: order });
@@ -32,6 +59,7 @@ class OrdersList extends Component {
 
 
     onClosed = async (result) => {
+        console.debug(result);
         if (result) {
             const response = await axios.get('/api/orders/');
             this.setState({ users: response.data });
@@ -72,8 +100,8 @@ class OrdersList extends Component {
                         <Route path="/users/edit/:id" />
                         <div className="card-body">
                             <Link to='/orders/create' className="btn btn-primary"><span className="fas fa-plus"></span> Create order</Link>{' '}
-                            <button className="btn btn-info"><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
-                            <button className="btn btn-info"><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>
+                            <button className="btn btn-info" disabled={!this.state.orderHubConnected}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
+                            <button className="btn btn-info" disabled={!this.state.orderHubConnected}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>
 
 
                             <table className="table table-hover users-table">
