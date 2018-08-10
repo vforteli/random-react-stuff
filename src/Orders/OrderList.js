@@ -41,6 +41,17 @@ class OrdersList extends Component {
             this.setState({ orders: this.state.orders.filter(o => o.invoice_id !== orderId) });
         });
 
+        connection.on('update'), (message) => {
+            console.debug('hubmessage', message);
+        }
+
+        connection.on('updateprogress', (progress) => {
+            console.debug('progress', progress);
+        });
+        connection.on('running', (isrunning) => {
+            console.debug('isrunning', isrunning);
+        });
+
         connection.start().then(result => {
             console.debug('orderHub connected');
             this.setState({ orderHubConnected: true });
@@ -105,9 +116,17 @@ class OrdersList extends Component {
 
     sendToAccounting = (event) => {
         console.debug('send to accounting');
-        console.debug(this.state.selectedOrders);
         // todo open log modal
-        // todo invoke hub
+        this.state.orderHubConnection.invoke('invoiceOrders', [...this.state.selectedOrders]);
+        // reload orders when complete        
+    }
+
+
+    sendToDanfoss = (event) => {
+        console.debug('send to danfoss');
+        // todo open log modal
+        this.state.orderHubConnection.invoke('sendtoDanfoss', [...this.state.selectedOrders]);    
+        // reload orders when complete    
     }
 
 
