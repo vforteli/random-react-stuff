@@ -27,7 +27,8 @@ class OrdersList extends Component {
         const response = await axios.get('/api/orders');
         this.setState({
             orders: response.data.Orders,
-            count: response.data.Count
+            count: response.data.Count,
+            selectedOrders: new Set()
         });
 
         // todo refactor setup of hub connection?
@@ -41,13 +42,18 @@ class OrdersList extends Component {
             this.setState({ orders: this.state.orders.filter(o => o.invoice_id !== orderId) });
         });
 
-        connection.on('update'), (message) => {
-            console.debug('hubmessage', message);
-        }
+        connection.on('reloadOrders', () => {
+            console.debug('reload orders');
+        });
+
+        connection.on('update', (message) => {
+            console.debug(message);
+        });
 
         connection.on('updateprogress', (progress) => {
             console.debug('progress', progress);
         });
+
         connection.on('running', (isrunning) => {
             console.debug('isrunning', isrunning);
         });
@@ -125,7 +131,7 @@ class OrdersList extends Component {
     sendToDanfoss = (event) => {
         console.debug('send to danfoss');
         // todo open log modal
-        this.state.orderHubConnection.invoke('sendtoDanfoss', [...this.state.selectedOrders]);    
+        this.state.orderHubConnection.invoke('sendtoDanfoss', [...this.state.selectedOrders]);
         // reload orders when complete    
     }
 
@@ -153,8 +159,8 @@ class OrdersList extends Component {
                         <Route path="/users/edit/:id" />
                         <div className="card-body">
                             <Link to='/orders/create' className="btn btn-primary"><span className="fas fa-plus"></span> Create order</Link>{' '}
-                            <button className="btn btn-info" disabled={!this.state.orderHubConnected} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
-                            <button className="btn btn-info" disabled={!this.state.orderHubConnected} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>
+                            <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
+                            <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>
 
                             <table className="table table-hover users-table">
                                 <thead>
