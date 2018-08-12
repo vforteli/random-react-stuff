@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import TextInputValidated from '../Shared/TextInputValidated';
+import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
 import ValidatedForm from '../Shared/ValidatedForm';
 import { ButtonLoading } from '../Shared/components';
 import ModalForm from '../Shared/ModalForm';
 import debounce from 'debounce-promise';
 import { toast } from 'react-toastify';
+import OrderLine from './OrderLine';
 
 
 class OrderDetail extends ModalForm {
@@ -14,13 +16,51 @@ class OrderDetail extends ModalForm {
         super(props);
 
         this.state = {
-            orderId: props.match.params.orderid,          
-            modal: true
+            orderId: props.match.params.orderid,
+            modal: true,
+            AddressName: '',
+            AddressAttention: '',
+            AddressReferencePerson: '',
+            AddressReference: '',
+            AddressStreet: '',
+            AddressZip: '',
+            AddressState: '',
+            AddressCity: '',
+            AddressCountry: '',
+            OrderID: undefined,
+            CurrencyId: undefined,            
+            Locale: '',
+            Vat: undefined,
+            TermofPayment: undefined,
+            Notes: '',
+            Number: undefined,
+            NumberPrefix: undefined,
+            Orderlines: undefined
         };
     }
 
     async componentDidMount() {
-        
+        const response = await axios.get(`api/orders/${this.state.orderId}`);
+        this.setState({
+            AddressName: response.data.AddressName,
+            AddressAttention: response.data.AddressAttention,
+            AddressReferencePerson: response.data.AddressReferencePerson,
+            AddressReference: response.data.AddressReference,
+            AddressStreet: response.data.AddressStreet,
+            AddressZip: response.data.AddressZip,
+            AddressState: response.data.AddressState,
+            AddressCity: response.data.AddressCity,
+            AddressCountry: response.data.AddressCountry,
+            OrderID: response.data.OrderID,
+            CurrencyId: response.data.CurrencyId,        
+            Locale: response.data.Locale,
+            Vat: response.data.Vat,
+            TermofPayment: response.data.TermofPayment,
+            Notes: response.data.Notes,
+            Number: response.data.Number,
+            NumberPrefix: response.data.NumberPrefix,
+            Orderlines: response.data.Orderlines
+        });
     }
 
 
@@ -35,36 +75,81 @@ class OrderDetail extends ModalForm {
     handleSubmit = async (event) => {
         this.setState({ loading: true });
 
-        
+
     }
 
 
     render() {
         return (
-            <Modal onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
+            <Modal size='lg' onClosed={this.onClosed} isOpen={this.state.modal} toggle={this.dismiss}>
                 <ValidatedForm onSubmit={this.handleSubmit} >
                     <div className="modal-content">
-                        <ModalHeader>{this.state.userId ? `Edit user ${this.state.fullname}` : 'Add user'}</ModalHeader>
+                        <ModalHeader>{this.state.orderId ? `Edit order ${this.state.orderId}` : 'Create order'}</ModalHeader>
                         <ModalBody>
-                            <TextInputValidated type="text" name="fullname" customValidators={[this.mockValidator, this.mockValidator2]} label="Name" required value={this.state.fullname} onChange={this.handleChange} placeholder="Firstname Lastname" />
-                            <TextInputValidated type="text" name="username" readOnly={this.state.userId} label="Username" required value={this.state.username} customValidators={[this.checkUsernameAvailabilityValidator]} onChange={this.handleChange} placeholder="Username">
-                                {!this.state.userId &&
-                                    <small className="form-text text-muted">
-                                        Set to desired username or use a randomly generated. <br />
-                                        The username must be unique and cannot be changed later
-                                    </small>
-                                }
-                            </TextInputValidated>
-                            <TextInputValidated type="email" name="email" label="Email" required value={this.state.email} onChange={this.handleChange} placeholder="email@example.com">
-                                {!this.state.userId &&
-                                    <div className="bs-callout bs-callout-info">
-                                        <h4>Adding a new user</h4>
-                                        After adding a user, an email invite for downloading the App will be sent to the user.<br />
-                                        The link must be clicked on the intended devices.<br />
-                                        If needed the invite can be resent later.
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <TextInputValidated type="text" name="AddressName" label="Name" required value={this.state.AddressName} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-4">
+                                    <TextAreaInputValidated name="AddressStreet" label="Name" value={this.state.AddressStreet} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-4">
+                                    <TextAreaInputValidated name="Notes" tabIndex="-1" label="Notes" value={this.state.Notes} onChange={this.handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-3">
+                                    <TextInputValidated type="text" name="AddressZip" label="Zip" value={this.state.AddressZip} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-3">
+                                    <TextInputValidated type="text" name="AddressCity" label="City" value={this.state.AddressCity} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-3">
+                                    <TextInputValidated type="text" name="AddressState" label="State" value={this.state.AddressState} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-3">
+                                    <TextInputValidated type="text" name="AddressCountry" label="Country" value={this.state.AddressCountry} onChange={this.handleChange} />
+                                </div>
+                            </div>
+
+
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <TextInputValidated type="text" name="AddressAttention" label="Attention" value={this.state.AddressAttention} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-4">
+                                    <TextInputValidated type="text" name="AddressReferencePerson" label="Ref person" value={this.state.AddressReferencePerson} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-4">
+                                    <TextInputValidated type="text" name="AddressReference" label="Reference" value={this.state.AddressReference} onChange={this.handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-3">
+                                    <div className="form-group form-group-sm">
+                                        <label className="control-label">Currency</label>
+                                        <select className="form-control" required ng-model="model.CurrencyId" ng-options="p.CurrencyId as p.CurrencyName for p in currencies"></select>
                                     </div>
-                                }
-                            </TextInputValidated>
+                                </div>
+                                <div className="col-sm-3">
+                                    <div className="form-group form-group-sm">
+                                        <label className="control-label">Language</label>
+                                        <select ng-model="model.Locale" className="form-control" required>
+                                            <option value="sv-SE">Swedish</option>
+                                            <option value="fi-FI">Finnish</option>
+                                            <option value="en-GB">English</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-sm-3">
+                                    <TextInputValidated type="number" required name="TermofPayment" label="Term of payment" value={this.state.TermofPayment} onChange={this.handleChange} />
+                                </div>
+                                <div className="col-sm-3">
+                                    <TextInputValidated type="number" required name="Vat" label="Vat %" value={this.state.Vat} onChange={this.handleChange} />
+                                </div>
+                            </div>
+
+                            {this.state.Orderlines && this.state.Orderlines.map(line => <OrderLine key={line.OrderlineID} value={line} />)}
                         </ModalBody>
                         <ModalFooter>
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">{this.state.userId ? 'Save user' : 'Add User & Send invite'}</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
