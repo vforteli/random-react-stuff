@@ -18,8 +18,7 @@ class OrdersList extends Component {
             selectedOrders: new Set(),
             count: 0,
             isDeleteModalOpen: false,
-            orderHubConnected: false,
-            orderHubConnection: null
+            orderHubConnected: false
         };
     }
 
@@ -33,37 +32,35 @@ class OrdersList extends Component {
 
         // todo refactor setup of hub connection?
         const accessToken = await getRefreshedAccessToken();
-        const connection = new signalr.HubConnectionBuilder()
+        this.orderHubConnection = new signalr.HubConnectionBuilder()
             .withUrl(`http://localhost:53848/hubs/ordershub?access_token=${accessToken}`)   // todo refactor url
             .build();
 
-        connection.on('orderDeleted', (orderId) => {
+        this.orderHubConnection.on('orderDeleted', (orderId) => {
             console.debug(`Order ${orderId} was deleted`);
             this.setState({ orders: this.state.orders.filter(o => o.invoice_id !== orderId) });
         });
 
-        connection.on('reloadOrders', () => {
+        this.orderHubConnection.on('reloadOrders', () => {
             console.debug('reload orders');
         });
 
-        connection.on('update', (message) => {
+        this.orderHubConnection.on('update', (message) => {
             console.debug(message);
         });
 
-        connection.on('updateprogress', (progress) => {
+        this.orderHubConnection.on('updateprogress', (progress) => {
             console.debug('progress', progress);
         });
 
-        connection.on('running', (isrunning) => {
+        this.orderHubConnection.on('running', (isrunning) => {
             console.debug('isrunning', isrunning);
         });
 
-        connection.start().then(result => {
+        this.orderHubConnection.start().then(result => {
             console.debug('orderHub connected');
             this.setState({ orderHubConnected: true });
-        }).catch(err => console.error(err.toString()));
-
-        this.setState({ orderHubConnection: connection });
+        }).catch(err => console.error(err.toString()));        
     }
 
 
@@ -77,8 +74,7 @@ class OrdersList extends Component {
     }
 
 
-    onClosed = async (result) => {
-        console.debug(result);
+    onClosed = async (result) => {        
         if (result) {
             const response = await axios.get('/api/orders/');
             this.setState({ users: response.data });
@@ -123,7 +119,7 @@ class OrdersList extends Component {
     sendToAccounting = (event) => {
         console.debug('send to accounting');
         // todo open log modal
-        this.state.orderHubConnection.invoke('invoiceOrders', [...this.state.selectedOrders]);
+        this.orderHubConnection.invoke('invoiceOrders', [...this.state.selectedOrders]);
         // reload orders when complete        
     }
 
@@ -131,7 +127,7 @@ class OrdersList extends Component {
     sendToDanfoss = (event) => {
         console.debug('send to danfoss');
         // todo open log modal
-        this.state.orderHubConnection.invoke('sendtoDanfoss', [...this.state.selectedOrders]);
+        this.orderHubConnection.invoke('sendtoDanfoss', [...this.state.selectedOrders]);
         // reload orders when complete    
     }
 
