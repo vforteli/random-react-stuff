@@ -60,7 +60,7 @@ class OrdersList extends Component {
         this.orderHubConnection.start().then(result => {
             console.debug('orderHub connected');
             this.setState({ orderHubConnected: true });
-        }).catch(err => console.error(err.toString()));        
+        }).catch(err => console.error(err.toString()));
     }
 
 
@@ -74,12 +74,24 @@ class OrdersList extends Component {
     }
 
 
-    onClosed = async (result) => {        
+    onClosed = async (result) => {
         if (result) {
             const response = await axios.get('/api/orders/');
             this.setState({ users: response.data });
         }
         this.props.history.push('/orders');
+    }
+
+
+    onCreateClosed = async (result) => {
+        if (result) {
+            const response = await axios.get('/api/orders/');
+            this.setState({ orders: response.data.Orders });
+            this.props.history.push(`/orders/edit/${result}`);
+        }
+        else {
+            this.props.history.push('/orders');
+        }
     }
 
 
@@ -156,8 +168,8 @@ class OrdersList extends Component {
                         <div className="card-body">
                             <Link to='/orders/create' className="btn btn-primary"><span className="fas fa-plus"></span> Create order</Link>{' '}
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
-                            <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>
-
+                            <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>{' '}
+                            [{this.state.selectedOrders.size} selected]
                             <table className="table table-hover users-table">
                                 <thead>
                                     <tr className="d-none d-md-table-row">
@@ -190,7 +202,7 @@ class OrdersList extends Component {
                     </div>
                 }
 
-                <Route path="/orders/create" render={props => <CreateOrderDetail {...props} onClosed={this.onClosed} />} />
+                <Route path="/orders/create" render={props => <CreateOrderDetail {...props} onClosed={this.onCreateClosed} />} />
                 <Route path="/orders/edit/:orderid" render={props => <OrderDetail {...props} onClosed={this.onClosed} />} />
             </div>
         );

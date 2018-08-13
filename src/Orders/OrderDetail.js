@@ -64,11 +64,9 @@ class OrderDetail extends ModalForm {
     }
 
 
-    handleChange = (event) => {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({ [name]: value });
+    handleChange = (event) => {        
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;        
+        this.setState({ [event.target.name]: value });
     }
 
 
@@ -152,7 +150,7 @@ class OrderDetail extends ModalForm {
                             {this.state.Orderlines && this.state.Orderlines.map(line => <OrderLine key={line.OrderlineID} value={line} />)}
                         </ModalBody>
                         <ModalFooter>
-                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">{this.state.userId ? 'Save user' : 'Add User & Send invite'}</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
+                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Save order</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
                 </ValidatedForm>

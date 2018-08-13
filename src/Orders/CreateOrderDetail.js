@@ -21,36 +21,21 @@ class CreateOrderDetail extends ModalForm {
 
     async componentDidMount() {
         const response = await axios.get('api/crmaccounts');
-        this.setState({ accounts: response.data });
-        /*
-                $http.get('/Api/crmaccounts/').then(function (response) {
-                    $scope.accounts = response.data;
-                    $scope.loading--;
-                });
-        
-                $scope.ok = function () {
-                    $scope.loading++;
-                    $http.post('/Api/orders/', $scope.model).then(function (response) {
-                        $uibModalInstance.close(response.data);
-                    }, function (response) {
-                        $scope.error = "Something went wrong: " + response.statusText;
-                    }).finally(function () { $scope.loading--; });
-                };
-        */
+        this.setState({ accounts: response.data }); 
     }
 
 
     handleChange = (event) => {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        this.setState({ [target.name]: value });
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+        this.setState({ [event.target.name]: value });
     }
 
 
     handleSubmit = async (event) => {
         this.setState({ loading: true });
-        //const response = await axios.post('api/orders', )
-        //this.dismiss(response.data);
+        console.debug(this.state.accountId);
+        const response = await axios.post('api/orders', {AccountID: this.state.accountId} )
+        this.props.onClosed(response.data);
     }
 
 
@@ -61,7 +46,10 @@ class CreateOrderDetail extends ModalForm {
                     <div className="modal-content">
                         <ModalHeader>Create order</ModalHeader>
                         <ModalBody>
-                            Hurr
+                            <select className="form-control" name="accountId" value={this.state.accountId} required onChange={this.handleChange}>
+                                <option value='' disabled>Select account...</option>
+                                {this.state.accounts && this.state.accounts.map(o => <option key={o.CRMAccountID} value={o.CRMAccountID}>{o.CommonName}</option>)}
+                            </select>
                         </ModalBody>
                         <ModalFooter>
                             <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Create order</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
