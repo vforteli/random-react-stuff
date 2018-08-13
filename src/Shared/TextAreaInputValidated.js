@@ -8,9 +8,11 @@ class TextAreaInputValidated extends ValidatedInput {
         return (
             <div className={this.props.required ? 'form-group required' : 'form-group'}>
                 <label htmlFor={this.props.name}>{this.props.label} {!this.props.required && <small>(Optional)</small>}</label>
-                <textarea onBlur={this.checkValidity} {...rest} className={this.state.hasError ? 'form-control is-invalid' : 'form-control'} {...rest} onChange={this.handleChange} />
+                <textarea onBlur={this.checkValidity} className={this.state.hasError ? 'form-control is-invalid' : 'form-control'} {...rest} onChange={this.handleChange} ref={this.inputRef} />
                 <div className="invalid-feedback">
-                    This field is required
+                    {this.state.validity.valueMissing && 'This field is required'}
+                    {!this.state.validity.valueMissing && this.state.validity.typeMismatch && 'This field is invalid'}
+                    {this.state.validity.customError && this.state.errorMessage}
                 </div>
                 {this.props.children}
             </div>
