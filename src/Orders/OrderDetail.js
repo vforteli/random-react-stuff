@@ -167,6 +167,14 @@ class OrderDetail extends ModalForm {
                                 <tbody>
                                     {this.state.Orderlines && this.state.Orderlines.map(o => <OrderLine key={o.OrderlineID} value={o} />)}
                                 </tbody>
+                                <tfoot>
+                                    {this.state.Orderlines &&
+                                        <tr>
+                                            <td colSpan="4">Total</td>
+                                            <td>{this.state.Orderlines.reduce((a, c) => a + c.Price * c.Quantity, 0)} {this.state.CurrencyId}</td>
+                                        </tr>
+                                    }
+                                </tfoot>
                             </table>
                         </ModalBody>
                         <ModalFooter>
