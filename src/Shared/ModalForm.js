@@ -4,7 +4,7 @@ class ModalForm extends Component {
     dismiss = (result) => {
         this.setState({
             modal: false,
-            result: result
+            result: false
         });
     }
 
