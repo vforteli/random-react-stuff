@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import TextInputValidated from '../Shared/TextInputValidated';
@@ -28,12 +28,12 @@ class OrderDetail extends ModalForm {
             AddressCity: '',
             AddressCountry: '',
             OrderID: undefined,
-            CurrencyId: undefined,            
+            CurrencyId: undefined,
             Locale: '',
-            Vat: undefined,
-            TermofPayment: undefined,
+            Vat: '',
+            TermofPayment: '',
             Notes: '',
-            Number: undefined,
+            Number: '',
             NumberPrefix: undefined,
             Orderlines: undefined
         };
@@ -52,11 +52,11 @@ class OrderDetail extends ModalForm {
             AddressCity: response.data.AddressCity,
             AddressCountry: response.data.AddressCountry,
             OrderID: response.data.OrderID,
-            CurrencyId: response.data.CurrencyId,        
+            CurrencyId: response.data.CurrencyId,
             Locale: response.data.Locale,
             Vat: response.data.Vat,
             TermofPayment: response.data.TermofPayment,
-            Notes: response.data.Notes,
+            Notes: response.data.Notes === null ? '' : response.data.Notes,
             Number: response.data.Number,
             NumberPrefix: response.data.NumberPrefix,
             Orderlines: response.data.Orderlines
@@ -64,9 +64,15 @@ class OrderDetail extends ModalForm {
     }
 
 
-    handleChange = (event) => {        
-        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;        
+    handleChange = (event) => {
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         this.setState({ [event.target.name]: value });
+    }
+
+
+    copyToNew = async (event) => {
+        const response = await axios.post(`/Api/orders/copy/${this.state.orderId}`);
+        this.props.history.push(`/orders/edit/${response.data}`);   // todo fix
     }
 
 
@@ -147,10 +153,24 @@ class OrderDetail extends ModalForm {
                                 </div>
                             </div>
 
-                            {this.state.Orderlines && this.state.Orderlines.map(line => <OrderLine key={line.OrderlineID} value={line} />)}
+                            <table className="table table-condensed table-hover">
+                                <thead>
+                                    <tr className="d-none d-md-table-row">
+                                        <td>Category</td>
+                                        <td>Title</td>
+                                        <td>Quantity</td>
+                                        <td>Price</td>
+                                        <td>Sum</td>
+                                        <td className="wrapcolumn"></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.Orderlines && this.state.Orderlines.map(o => <OrderLine key={o.OrderlineID} value={o} />)}
+                                </tbody>
+                            </table>
                         </ModalBody>
                         <ModalFooter>
-                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Save order</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
+                            <ButtonLoading className="btn btn-primary" loading={this.state.loading} type="submit">Save order</ButtonLoading> <ButtonLoading className="btn btn-info" type="button" onClick={this.copyToNew}>Copy to new</ButtonLoading> <button type="button" className="btn btn-default" onClick={this.dismiss}>Cancel</button>
                         </ModalFooter>
                     </div>
                 </ValidatedForm>
