@@ -57,16 +57,14 @@ class OrdersList extends Component {
             console.debug('isrunning', isrunning);
         });
 
-        this.orderHubConnection.start().then(result => {
-            console.debug('orderHub connected');
+        this.orderHubConnection.start().then(result => {            
             this.setState({ orderHubConnected: true });
         }).catch(err => console.error(err.toString()));
     }
 
 
     async componentWillUnmount() {
-        await this.state.orderHubConnection.stop();
-        console.debug('orderHub stopped');
+        await this.orderHubConnection.stop();        
     }
 
     confirmDeleteOrder = (order) => {
