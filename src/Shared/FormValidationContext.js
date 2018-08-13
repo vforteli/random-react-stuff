@@ -4,13 +4,7 @@ export const FormValidationContext = React.createContext();
 
 
 export function withValidation(WrappedComponent) {
-    return class extends React.Component {
-        constructor(props) {
-            super(props);
-            console.debug('wiiii');
-        }
-
-
+    return class extends React.Component {       
         render() {
             return (
                 <FormValidationContext.Consumer>
@@ -20,4 +14,3 @@ export function withValidation(WrappedComponent) {
         }
     };
 }
-
