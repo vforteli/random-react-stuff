@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="sass\**" />
+    <Content Remove="sass\**" />
+    <EmbeddedResource Remove="sass\**" />
+    <None Remove="sass\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="gruntfile.js" />
     <None Remove="public\Content\img\20170117_587d98a7d9db8.png" />
     <None Remove="public\Content\img\712.GIF" />
@@ -22,7 +29,6 @@
     <None Remove="public\Content\img\visa.svg" />
     <None Remove="public\Content\img\wandera-wide-2.png" />
     <None Remove="public\favicon.ico" />
-    <None Remove="sass\bootstrap-callout.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -81,7 +87,6 @@
     <Content Include="public\favicon.ico">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="sass\bootstrap-callout.css" />
   </ItemGroup>
 
   <ItemGroup>
