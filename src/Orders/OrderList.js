@@ -167,7 +167,7 @@ class OrdersList extends Component {
                             <Link to='/orders/create' className="btn btn-primary"><span className="fas fa-plus"></span> Create order</Link>{' '}
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>{' '}
-                            [{this.state.selectedOrders.size} selected]
+                            [<strong>{this.state.selectedOrders.size}</strong> selected]
                             <table className="table table-hover users-table">
                                 <thead>
                                     <tr className="d-none d-md-table-row">
