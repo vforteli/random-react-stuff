@@ -10,6 +10,7 @@ import OrdersList from './Orders/OrderList';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { authInterceptor } from 'flexinets-react-authentication';
+import './styles/site.css';
 
 
 class App extends Component {
