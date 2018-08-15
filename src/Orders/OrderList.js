@@ -18,6 +18,8 @@ class OrdersList extends Component {
             orders: null,
             selectedOrders: new Set(),
             count: 0,
+            pageSize: 50,
+            currentPage: 1,
             isDeleteModalOpen: false,
             orderHubConnected: false
         };
@@ -69,6 +71,12 @@ class OrdersList extends Component {
     async componentWillUnmount() {
         await this.orderHubConnection.stop();
     }
+
+
+    pageChanged = (page) => {
+        this.setState({ currentPage: page });
+    }
+
 
     confirmDeleteOrder = (order) => {
         this.setState({ isDeleteModalOpen: true, deleteOrder: order });
@@ -171,7 +179,7 @@ class OrdersList extends Component {
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>{' '}
                             [<strong>{this.state.selectedOrders.size}</strong> selected]
-                            
+
 
                             <table className="table table-hover users-table">
                                 <thead>
@@ -201,6 +209,8 @@ class OrdersList extends Component {
                                     )}
                                 </tbody>
                             </table>
+
+                            <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
                         </div>
                     </div>
                 }

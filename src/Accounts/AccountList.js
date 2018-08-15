@@ -26,7 +26,7 @@ class AccountList extends React.Component {
             <div className="container">
                 <h3>Accounts</h3>                
 
-                <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} maxSize={this.state.maxSize} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
+                <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
 
                 <br />
                 Current page {this.state.currentPage}
