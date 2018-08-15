@@ -8,9 +8,10 @@ class AccountList extends React.Component {
         super(props);
 
         this.state = {
-            count: 501,
+            count: 851,
             pageSize: 50,
-            currentPage: 1
+            currentPage: 1,
+            maxSize: 9
         }
     }
 
@@ -23,11 +24,9 @@ class AccountList extends React.Component {
     render() {
         return (
             <div className="container">
-                <h3>Accounts</h3>
+                <h3>Accounts</h3>                
 
-                <button className="btn btn-info" type="button" onClick={() => this.setState({ count: 2 })}>derp {this.state.count}</button>
-
-                <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
+                <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} maxSize={this.state.maxSize} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
 
                 <br />
                 Current page {this.state.currentPage}

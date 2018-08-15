@@ -17,33 +17,40 @@ class PaginationControl extends React.Component {
 
     getPageCount = () => Math.ceil(this.props.totalCount / this.props.pageSize);
 
+    getPagesToShow = () => {
+        const foo = this.props.maxSize / 2;
+        const offset = Math.max(0, 1 - Math.ceil(this.props.currentPage - foo)) + Math.min(0, Math.ceil(this.getPageCount() - (this.props.currentPage + foo)));
+        const start = Math.ceil(this.props.currentPage - foo);
+        return Array.from({ length: this.props.maxSize }, (v, k) => k + start + offset);
+    }
+
 
     render() {
         return (
             <Pagination>
                 {this.props.maxSize < this.getPageCount() &&
                     <PaginationItem disabled={this.props.currentPage === 1}>
-                        <PaginationLink href="#" onClick={() => this.pageChanged(1)}>First</PaginationLink>
+                        <PaginationLink href="" onClick={() => this.pageChanged(1)}>First</PaginationLink>
                     </PaginationItem>
                 }
                 <PaginationItem disabled={this.props.currentPage === 1}>
-                    <PaginationLink href="#" onClick={() => this.pageChanged(this.props.currentPage - 1)}>Previous</PaginationLink>
+                    <PaginationLink href="" onClick={() => this.pageChanged(this.props.currentPage - 1)}>Previous</PaginationLink>
                 </PaginationItem>
 
-                {Array.from({ length: this.getPageCount() }, (v, k) => k + 1).map(i =>
+                {this.getPagesToShow().map(i =>
                     <PaginationItem key={i} active={this.props.currentPage === i}>
-                        <PaginationLink href="#" onClick={() => this.pageChanged(i)}>
+                        <PaginationLink href="" onClick={() => this.pageChanged(i)}>
                             {i}
                         </PaginationLink>
                     </PaginationItem>
                 )}
 
                 <PaginationItem disabled={this.props.currentPage === this.getPageCount()}>
-                    <PaginationLink href="#" onClick={() => this.pageChanged(this.props.currentPage + 1)}>Next</PaginationLink>
+                    <PaginationLink href="" onClick={() => this.pageChanged(this.props.currentPage + 1)}>Next</PaginationLink>
                 </PaginationItem>
                 {this.props.maxSize < this.getPageCount() &&
                     <PaginationItem disabled={this.props.currentPage === this.getPageCount()}>
-                        <PaginationLink href="#" onClick={() => this.pageChanged(this.getPageCount())}>Last</PaginationLink>
+                        <PaginationLink href="" onClick={(e) => { e.preventDefault(); this.pageChanged(this.getPageCount()); }}>Last</PaginationLink>
                     </PaginationItem>
                 }
             </Pagination>
@@ -53,8 +60,9 @@ class PaginationControl extends React.Component {
 }
 
 PaginationControl.defaultProps = {
-    maxSize: 10
+    maxSize: 5
 };
+
 PaginationControl.propTypes = {
     totalCount: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
