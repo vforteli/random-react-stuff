@@ -172,8 +172,6 @@ class OrdersList extends Component {
 
                 {this.state.orders && this.state.orders.length > 0 &&
                     <div className="card mb-3">
-                        <Route path="/users/create" />
-                        <Route path="/users/edit/:id" />
                         <div className="card-body">
                             <Link to='/orders/create' className="btn btn-primary"><span className="fas fa-plus"></span> Create order</Link>{' '}
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
