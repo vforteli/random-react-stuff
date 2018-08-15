@@ -9,6 +9,7 @@ import CustomerTypeIcon from './CustomerTypeIcon';
 import * as signalr from '@aspnet/signalr';
 import { getRefreshedAccessToken } from 'flexinets-react-authentication';
 import { CustomInput } from 'reactstrap';
+import PaginationControl from '../Shared/PaginationControl';
 
 class OrdersList extends Component {
     constructor(props) {
@@ -20,6 +21,8 @@ class OrdersList extends Component {
             isDeleteModalOpen: false,
             orderHubConnected: false
         };
+
+        console.debug(this.props.location.search);
     }
 
     async componentDidMount() {
@@ -57,14 +60,14 @@ class OrdersList extends Component {
             console.debug('isrunning', isrunning);
         });
 
-        this.orderHubConnection.start().then(result => {            
+        this.orderHubConnection.start().then(result => {
             this.setState({ orderHubConnected: true });
         }).catch(err => console.error(err.toString()));
     }
 
 
     async componentWillUnmount() {
-        await this.orderHubConnection.stop();        
+        await this.orderHubConnection.stop();
     }
 
     confirmDeleteOrder = (order) => {
@@ -168,6 +171,9 @@ class OrdersList extends Component {
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>{' '}
                             [<strong>{this.state.selectedOrders.size}</strong> selected]
+
+                            <PaginationControl count={this.state.count} pageSize={50} />
+
                             <table className="table table-hover users-table">
                                 <thead>
                                     <tr className="d-none d-md-table-row">
