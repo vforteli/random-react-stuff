@@ -7,6 +7,7 @@ import Menu from './menu';
 import Login from './Login/login';
 import Home from './Home/home';
 import OrdersList from './Orders/OrderList';
+import AccountList from './Accounts/AccountList';
 import { ToastContainer } from 'react-toastify';
 import { authInterceptor } from 'flexinets-react-authentication';
 
@@ -28,6 +29,7 @@ class App extends Component {
                         <div className="site-content">
                             <PrivateRoute exact path='/' component={Home} />
                             <PrivateRoute path='/orders' component={OrdersList} />
+                            <PrivateRoute path='/accounts' component={AccountList} />
                             <Route path="/login" component={Login} />
                         </div>
                     </div>

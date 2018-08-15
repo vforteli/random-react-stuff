@@ -36,6 +36,7 @@ class Menu extends Component {
                                 <Nav className="mr-auto" navbar>
                                     <NavItem><NavLink to='/users' activeClassName='menuactive' className="nav-link">Users</NavLink></NavItem>
                                     <NavItem><NavLink to='/subscription' activeClassName='menuactive' className="nav-link">Subscription</NavLink></NavItem>
+                                    <NavItem><NavLink to='/accounts' activeClassName='menuactive' className="nav-link">Accounts</NavLink></NavItem>
                                     <NavItem><NavLink to='/orders' activeClassName='menuactive' className="nav-link">Orders</NavLink></NavItem>
                                 </Nav>
                                 <Nav navbar>

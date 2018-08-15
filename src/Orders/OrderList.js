@@ -171,8 +171,7 @@ class OrdersList extends Component {
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToAccounting}><i className="fas fa-cloud-upload-alt"></i> Send to Accounting</button>{' '}
                             <button className="btn btn-info" disabled={!this.state.orderHubConnected || this.state.selectedOrders.size === 0} onClick={this.sendToDanfoss}><i className="fas fa-cloud-upload-alt"></i> Send to Danfoss</button>{' '}
                             [<strong>{this.state.selectedOrders.size}</strong> selected]
-
-                            <PaginationControl count={this.state.count} pageSize={50} />
+                            
 
                             <table className="table table-hover users-table">
                                 <thead>
