@@ -9,7 +9,7 @@ import CustomerTypeIcon from './CustomerTypeIcon';
 import * as signalr from '@aspnet/signalr';
 import { getRefreshedAccessToken } from 'flexinets-react-authentication';
 import { CustomInput } from 'reactstrap';
-import PaginationControl from '../Shared/PaginationControl';
+import PaginationControl from 'flexinets-reactstrap-pagination';
 
 class OrdersList extends Component {
     constructor(props) {

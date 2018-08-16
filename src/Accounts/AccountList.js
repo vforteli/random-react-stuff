@@ -1,5 +1,5 @@
 import React from 'react';
-import PaginationControl from '../Shared/PaginationControl';
+import PaginationControl from 'flexinets-reactstrap-pagination';
 import axios from 'axios';
 
 
