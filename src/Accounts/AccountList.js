@@ -8,8 +8,7 @@ class AccountList extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            count: 851,
+        this.state = {            
             pageSize: 50,
             currentPage: 1,
             accounts: null,
