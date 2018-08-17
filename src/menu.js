@@ -35,7 +35,7 @@ class Menu extends Component {
                             <Collapse isOpen={this.state.navbarOpen} navbar>
                                 <Nav className="mr-auto" navbar>
                                     <NavItem><NavLink to='/users' activeClassName='menuactive' className="nav-link">Users</NavLink></NavItem>
-                                    <NavItem><NavLink to='/subscription' activeClassName='menuactive' className="nav-link">Subscription</NavLink></NavItem>
+                                    <NavItem><NavLink to='/mbb/networks' activeClassName='menuactive' className="nav-link">Networks</NavLink></NavItem>
                                     <NavItem><NavLink to='/accounts' activeClassName='menuactive' className="nav-link">Accounts</NavLink></NavItem>
                                     <NavItem><NavLink to='/orders' activeClassName='menuactive' className="nav-link">Orders</NavLink></NavItem>
                                 </Nav>

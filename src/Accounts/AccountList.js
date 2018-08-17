@@ -8,7 +8,7 @@ class AccountList extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {            
+        this.state = {
             pageSize: 50,
             currentPage: 1,
             accounts: null,
@@ -30,6 +30,7 @@ class AccountList extends React.Component {
     pageChanged = (page) => {
         console.debug(`Yay page changed to ${page}`);
         this.setState({ currentPage: page });
+        this.props.history.push(`/accounts?page=${page}`);
     }
 
     render() {
@@ -70,10 +71,7 @@ class AccountList extends React.Component {
                                 </tbody>
                             </table>
 
-
-
-
-                            <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
+                            <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} maxSize={10} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
                         </div>
                     </div>
                 }

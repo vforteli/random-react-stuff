@@ -8,6 +8,7 @@ import Login from './Login/login';
 import Home from './Home/home';
 import OrdersList from './Orders/OrderList';
 import AccountList from './Accounts/AccountList';
+import NetworkList from './Networks/NetworkList';
 import { ToastContainer } from 'react-toastify';
 import { authInterceptor } from 'flexinets-react-authentication';
 
@@ -30,6 +31,7 @@ class App extends Component {
                             <PrivateRoute exact path='/' component={Home} />
                             <PrivateRoute path='/orders' component={OrdersList} />
                             <PrivateRoute path='/accounts' component={AccountList} />
+                            <PrivateRoute path='/mbb/networks' component={NetworkList} />
                             <Route path="/login" component={Login} />
                         </div>
                     </div>
