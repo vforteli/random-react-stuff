@@ -1,23 +1,31 @@
 import React from 'react';
 import PaginationControl from 'flexinets-reactstrap-pagination';
 import axios from 'axios';
+import qs from 'qs';
 
 
 
 class AccountList extends React.Component {
     constructor(props) {
         super(props);
+        const queryString = qs.parse(this.props.location.search.slice(1));
+
 
         this.state = {
             pageSize: 50,
-            currentPage: 1,
+            currentPage: queryString.page ? parseInt(queryString.page) : 1,
             accounts: null,
-            count: 0
+            count: 0,
+            searchString: queryString.search ? queryString.search : ""
         }
     }
 
     async componentDidMount() {
-        const response = await axios.get('/Api/v2/CrmAccounts/');
+        await this.fetchAccounts()
+    }
+
+    async fetchAccounts() {
+        const response = await axios.get(`/Api/v2/CrmAccounts/?page=${this.state.currentPage}&search=${this.state.searchString}`);
         this.setState({
             accounts: response.data.Accounts,
             count: response.data.Count
@@ -25,11 +33,10 @@ class AccountList extends React.Component {
     }
 
 
-
-
-    pageChanged = (page) => {
+    pageChanged = async (page) => {
         console.debug(`Yay page changed to ${page}`);
         this.setState({ currentPage: page });
+        await this.fetchAccounts();
         this.props.history.push(`/accounts?page=${page}`);
     }
 
@@ -48,6 +55,7 @@ class AccountList extends React.Component {
                 {this.state.accounts !== null &&
                     <div className="card mb-3">
                         <div className="card-body">
+                            <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} maxSize={10} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
                             <table className="table table-hover users-table">
                                 <thead>
                                     <tr className="d-none d-md-table-row">
