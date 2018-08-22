@@ -1,5 +1,6 @@
 import React from 'react';
 import PaginationControl from 'flexinets-reactstrap-pagination';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
 import debounce from 'debounce-promise';
@@ -22,7 +23,7 @@ class AccountList extends React.Component {
     }
 
     async componentDidMount() {
-        await this.fetchAccounts()
+        await this.fetchAccounts();        
     }
 
     async fetchAccounts() {
@@ -76,7 +77,7 @@ class AccountList extends React.Component {
 
                             <div className="row">
                                 <div className="col-sm-9">
-                                    <a ui-sref="accounts.detail.create" className="btn btn-primary"><i className="fas fa-plus"></i> New account</a>
+                                    <Link to='/orders/create' className="btn btn-primary"><span className="fas fa-plus"></span> New account</Link>{' '}
                                 </div>
                                 <div className="col-sm-3">
                                     <span className="input-group">
@@ -87,16 +88,16 @@ class AccountList extends React.Component {
                                     </span>
                                 </div>
                             </div>
-
+                            <br />
                             <PaginationControl totalCount={this.state.count} pageSize={this.state.pageSize} maxSize={10} currentPage={this.state.currentPage} pageChanged={this.pageChanged} />
                             <table className="table table-hover users-table">
                                 <thead>
                                     <tr className="d-none d-md-table-row">
-                                        <td>Common name</td>
-                                        <td>Address name</td>
-                                        <td>ExternalId</td>
-                                        <td>Customer type</td>
-                                        <td></td>
+                                        <th>Common name</th>
+                                        <th>Address name</th>
+                                        <th>ExternalId</th>
+                                        <th>Customer type</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
