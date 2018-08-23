@@ -1,11 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import TextInputValidated from '../Shared/TextInputValidated';
 import ValidatedForm from '../Shared/ValidatedForm';
 import { ButtonLoading } from '../Shared/components';
 import ModalForm from '../Shared/ModalForm';
-import debounce from 'debounce-promise';
 import { toast } from 'react-toastify';
 
 
@@ -21,7 +19,7 @@ class CreateOrderDetail extends ModalForm {
 
     async componentDidMount() {
         const response = await axios.get('api/crmaccounts');
-        this.setState({ accounts: response.data }); 
+        this.setState({ accounts: response.data });
     }
 
 
@@ -34,8 +32,15 @@ class CreateOrderDetail extends ModalForm {
     handleSubmit = async (event) => {
         this.setState({ loading: true });
         console.debug(this.state.accountId);
-        const response = await axios.post('api/orders', {AccountID: this.state.accountId} )
-        this.props.onClosed(response.data);
+        const response = await axios.post('api/orders', { AccountID: this.state.accountId });
+        if (response.status === 200) {
+            toast.info("Order created");
+            this.props.onClosed(response.data);
+        }
+        else {
+            toast.error("Something went wrong :/");
+            console.debug(response);
+        }
     }
 
 

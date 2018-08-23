@@ -1,5 +1,4 @@
 import React from 'react';
-import PaginationControl from 'flexinets-reactstrap-pagination';
 import axios from 'axios';
 
 class NetworkList extends React.Component {

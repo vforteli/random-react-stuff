@@ -6,8 +6,6 @@ import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
 import ValidatedForm from '../Shared/ValidatedForm';
 import { ButtonLoading } from '../Shared/components';
 import ModalForm from '../Shared/ModalForm';
-import debounce from 'debounce-promise';
-import { toast } from 'react-toastify';
 import OrderLine from './OrderLine';
 
 

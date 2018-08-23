@@ -26,7 +26,7 @@ class NewsList extends Component {
                             <article key={index}>
                                 <span className="newsdate">{moment(item.CreatedOn).format('MMMM Do')}</span>
                                 <header>{item.Title}</header>
-                                <p>{item.Text}</p>
+                                <p dangerouslySetInnerHTML={{ __html: item.Text }}></p>
                                 <a href={item.Url}>Read more</a>
                             </article>
                         )

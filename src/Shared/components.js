@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import { Component } from 'react';
+﻿import React, { Component, Fragment } from 'react';
 
 class ButtonLoading extends Component {
     render() {
@@ -10,4 +9,18 @@ class ButtonLoading extends Component {
     }
 }
 
-export { ButtonLoading };
+class TableLoading extends Component {
+    render() {
+        return (
+            <Fragment>
+                {this.props.loading &&
+                    <div className="text-center">
+                        <div className="chartloading"></div>
+                        <h4>{this.props.children}</h4>
+                    </div>}
+            </Fragment>
+        );
+    }
+}
+
+export { ButtonLoading, TableLoading };
