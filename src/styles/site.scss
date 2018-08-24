@@ -71,10 +71,19 @@ body.modal-open .modal-blur {
 .site-content {
     margin-top: 60px; /* ugly hack for now */
     flex: 1;
-    /*background: url('https://www.flexinets.eu//wp-content/uploads/2015/10/iStock_000023734096_Medium.jpg');
-    background-size: cover;*/
 }
 
+
+/* This is here to test position sticky */
+.site-content{
+    margin-top: 0;
+}
+
+nav.fixed-top{
+    position: sticky;
+}
+
+/* **** */
 
 
 
