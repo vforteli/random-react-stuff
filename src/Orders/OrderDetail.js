@@ -1,9 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import TextInputValidated from '../Shared/TextInputValidated';
-import TextAreaInputValidated from '../Shared/TextAreaInputValidated';
-import ValidatedForm from '../Shared/ValidatedForm';
+import { TextInputValidated, ValidatedForm, TextAreaInputValidated } from 'flexinets-react-validation';
 import { ButtonLoading } from '../Shared/components';
 import ModalForm from '../Shared/ModalForm';
 import OrderLine from './OrderLine';

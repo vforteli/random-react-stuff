@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import ValidatedForm from '../Shared/ValidatedForm';
+import { ValidatedForm } from 'flexinets-react-validation';
 import { ButtonLoading } from '../Shared/components';
 import ModalForm from '../Shared/ModalForm';
 import { toast } from 'react-toastify';

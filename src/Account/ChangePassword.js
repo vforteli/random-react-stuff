@@ -1,11 +1,10 @@
 ﻿import React from 'react';
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import TextInputValidated from '../Shared/TextInputValidated';
+import { TextInputValidated, ValidatedForm } from 'flexinets-react-validation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ACCOUNT_URL } from 'flexinets-react-authentication';
-import ValidatedForm from '../Shared/ValidatedForm';
 import ModalForm from '../Shared/ModalForm';
 
 

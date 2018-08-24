@@ -3,7 +3,7 @@ import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import ValidatedForm from '../Shared/ValidatedForm';
+import { ValidatedForm } from 'flexinets-react-validation';
 import ModalForm from '../Shared/ModalForm';
 
 

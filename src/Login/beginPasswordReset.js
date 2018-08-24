@@ -2,8 +2,8 @@
 import { ButtonLoading } from '../Shared/components';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { beginReset } from 'flexinets-react-authentication';
-import ValidatedForm from '../Shared/ValidatedForm';
-import TextInputValidated from '../Shared/TextInputValidated';
+import { ValidatedForm, TextInputValidated } from 'flexinets-react-validation';
+
 
 
 class BeginPasswordReset extends Component {
@@ -22,9 +22,9 @@ class BeginPasswordReset extends Component {
         this.setState({ [name]: value });
     }
 
-    handleSubmit = async (event) => {        
+    handleSubmit = async (event) => {
         this.setState({ loading: true });
-        await beginReset(this.state.emailaddress);
+        await beginReset(this.state.emailaddress, "urlgoeshere");
         this.setState({ loading: false });
         this.dismiss();
     }
